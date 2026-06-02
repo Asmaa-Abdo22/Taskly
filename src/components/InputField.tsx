@@ -1,54 +1,53 @@
-
-'use client';
+"use client";
+import Image from "next/image";
+import noValidate from "@/src/icons/noValidate.png";
 
 interface InputFieldProps {
   label: string;
-  name: string;
-  value?: string;
-  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  id: string;
   placeholder?: string;
   error?: string;
-  warning?: string;
   type?: string;
 }
 
 export default function InputField({
   label,
-  name,
-  value,
-  onChange,
+  id,
   placeholder,
   error,
-  warning,
-  type = 'text',
-}: InputFieldProps) {
+  type = "text",
+  ...rest
+}: any) {
   return (
-    <div className="w-75">
-      <label 
-        htmlFor={name} 
-        className="block text-label-sm text-slate-700 uppercase tracking-wide mb-1"
+    <div className="w-full ">
+      <label
+        htmlFor={id}
+        className="block text-label-sm text-slate-700 uppercase leading-[16.5px] tracking-wide mb-2"
       >
         {label}
       </label>
+
       <input
+        id={id}
         type={type}
-        id={name}
-        name={name}
-        value={value}
-        onChange={onChange}
         placeholder={placeholder}
-        className={`
-          w-full px-3 py-2 text-body-md text-slate-900 bg-surface-low 
-          border rounded-md focus:outline-none focus:ring-1 focus:ring-primaryy/50
-          transition-colors placeholder:text-slate-300
-          ${error ? 'border-error' : 'border-transparent'}
-        `}
+        className={`w-full placeholder:text-[#737685] px-3 py-2 text-body-md text-slate-900 bg-surface-highest border-transparent rounded-md focus:outline-none focus:ring-1 focus:ring-primaryy/50 transition-colors `}
+        {...rest}
       />
-      {error && (
+
+      {error && error.length === 1 && (
         <p className="text-label-sm text-error mt-1">{error}</p>
       )}
-      {warning && !error && (
-        <p className="text-label-sm text-warning mt-1">{warning}</p>
+
+      {error && error.length > 1 && (
+        <p className="bg-surface-low text-[#434654] text-[11px] mt-2 flex flex-col gap-1 p-2 rounded">
+          {error.split(",").map((err: string, index: number) => (
+            <span key={index} className="flex items-center gap-2">
+              <Image src={noValidate} alt="" width={12} height={12} />
+              {err.trim()}
+            </span>
+          ))}
+        </p>
       )}
     </div>
   );

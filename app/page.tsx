@@ -1,11 +1,5 @@
-import Rocket from "@/icons/rocket.svg";
-import InputField from "@/src/components/InputField";
+import { redirect } from "next/navigation";
 
 export default function Home() {
-  return (
-    <>
-      <h1>welcome to taskly</h1>
-     
-    </>
-  );
+  redirect("/sign-up")
 }

@@ -151,21 +151,18 @@ body {
   padding: 0.5rem 1rem;
   border-radius: 0.25rem;
   font-weight: 500;
- cursor: pointer;
+  cursor: pointer;
   transition: background-color 0.3s ease;
-  width: fit-content;
   text-transform: capitalize;
 }
 .btn-primaryy {
   background-color: var(--primaryy);
   color: white;
- 
 }
 .btn-primaryy:hover {
   background-color: var(--primaryy-container);
 }
 .btn-secondary {
- 
   color: var(--primaryy);
 }
 .btn-secondary:hover {
@@ -174,4 +171,15 @@ body {
 .btn-ghostAction {
   background-color: transparent;
   color: var(--slate-300);
+}
+.formStyle {
+  border: 1px solid var(--surface-low);
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  align-items: center;
+  box-shadow: 0px 24px 48px 0px rgba(4, 27, 60, 0.06);
 }

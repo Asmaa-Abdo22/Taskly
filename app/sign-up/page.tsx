@@ -12,13 +12,8 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import LoadingSpinner from "@/src/components/LoadingSpinner";
-
-const page = () => {
-  const router = useRouter();
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const schema = z.object({
+import eyeClosed from "@/src/icons/eyeClosed.png";
+ const schema = z.object({
     name: z
       .string()
       .min(3, "Name must be at least 3 characters")
@@ -37,6 +32,12 @@ const page = () => {
       .regex(/[!@#$%^&*]/, "Must contain special character"),
     confirmPassword: z.string(),
   });
+const page = () => {
+  const router = useRouter();
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
+ 
 
   const finalSchema = schema.refine(
     (data) => data.password === data.confirmPassword,
@@ -99,7 +100,7 @@ const page = () => {
         toast.success("Account created successfully!");
 
         setTimeout(() => {
-          router.push("/project");
+          router.replace("/project");
         }, 2500);
       }
     } catch (error) {
@@ -118,7 +119,7 @@ const page = () => {
       className="formStyle  w-[90%]   px-7 md:[48px] md:w-xl md:bg-white"
       onSubmit={handleSubmit(signUp)}
     >
-      <h1 className=" text-[27px] font-semibold md:text-headline-lg  ">
+      <h1 className=" text-[27px] font-semibold md:text-headline-lg  pt-5">
         Create your workspace
       </h1>
       <p className="text-[14px] hidden md:block text-[#737685]">
@@ -172,7 +173,7 @@ const page = () => {
           />
 
           <Image
-            src={passEye}
+            src={showPassword ? passEye : eyeClosed}
             alt="password eye icon"
             width={18}
             height={18}
@@ -211,7 +212,7 @@ const page = () => {
           />
 
           <Image
-            src={passEye}
+            src={showConfirmPassword ? passEye : eyeClosed}
             alt="password eye icon"
             width={18}
             height={18}

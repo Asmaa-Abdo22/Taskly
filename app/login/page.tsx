@@ -30,13 +30,7 @@ const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const router = useRouter();
 
-  useEffect(() => {
-    const token = Cookies.get("access_token");
-    if (token) {
-      router.push("/");
-    }
-  }, []);
-
+  const [isMobile, setIsMobile] = useState(false);
   const {
     register,
     handleSubmit,
@@ -99,7 +93,7 @@ const LoginPage = () => {
   return (
     <form
       onSubmit={handleSubmit(login)}
-      className="formStyle w-[90%] px-7 md:[48px] md:w-xl"
+      className="formStyle w-[90%] px-7 md:[48px] md:w-xl md:bg-white"
     >
       <h1 className="text-[27px] font-semibold md:text-headline-lg pt-5">
         Welcome Back
@@ -140,13 +134,13 @@ const LoginPage = () => {
           </label>
 
           <div className="md:hidden font-bold text-end mb-2 text-[11px] text-brimaryy">
-            <Link href="">Forgot?</Link>
+            <Link href="/forgot-password">Forgot?</Link>
           </div>
         </div>
 
         <input
           id="password"
-          placeholder="......"
+          placeholder="Enter your password"
           type={showPassword ? "text" : "password"}
           className="w-full px-3 py-2 text-body-md bg-surface-highest rounded-md"
           {...register("password")}
@@ -169,17 +163,42 @@ const LoginPage = () => {
       </div>
 
       {/* Remember Me */}
-      <div className="hidden md:flex gap-2 mb-4 md:w-120">
-        <div className="w-1/2 flex-1">
-          <input type="checkbox" id="remember" {...register("remember")} />
-          <label htmlFor="remember">Remember Me</label>
+      {isMobile ? (
+        <div className="mb-4 w-75">
+          <div className="flex items-center gap-2">
+            <input
+              type="checkbox"
+              id="remember-mobile"
+              {...register("remember")}
+              className="cursor-pointer"
+            />
+            <label
+              htmlFor="remember-mobile"
+              className="text-[13px] text-slate-700 cursor-pointer"
+            >
+              Remember Me
+            </label>
+          </div>
         </div>
+      ) : (
+        <div className="flex gap-2 mb-4 md:w-120">
+          <div className="w-1/2 flex-1">
+            <input
+              type="checkbox"
+              id="remember"
+              {...register("remember")}
+              className="mr-2 cursor-pointer w-4 h-4"
+            />
+            <label htmlFor="remember" className="cursor-pointer">
+              Remember Me
+            </label>
+          </div>
 
-        <div className="w-1/2 text-end font-medium text-brimaryy">
-          <Link href="">Forgot Password?</Link>
+          <div className="w-1/2 text-end font-medium text-brimaryy">
+            <Link href="/forgot-password">Forgot Password?</Link>
+          </div>
         </div>
-      </div>
-
+      )}
       {/* Desktop Button */}
       <button
         type="submit"
@@ -191,7 +210,7 @@ const LoginPage = () => {
       {/* Mobile Button */}
       <button
         type="submit"
-        className="btn btn-primaryy md:hidden w-75 relative"
+        className="btn btn-primaryy md:hidden w-80 relative"
       >
         {loading ? <LoadingSpinner /> : "Sign In"}
 
@@ -204,8 +223,8 @@ const LoginPage = () => {
         />
       </button>
 
-      <p className="mt-10 text-body-md">
-        <span className="text-slate-700">Don't Have an account?</span>{" "}
+      <p className="mt-50 md:mt-10 text-body-md mb-5">
+        <span className="text-slate-700 ">Don't Have an account?</span>{" "}
         <Link href="/sign-up" className="text-primaryy-container font-semibold">
           Sign Up
         </Link>

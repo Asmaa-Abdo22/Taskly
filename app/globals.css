@@ -41,7 +41,7 @@
 }
 body {
   font-family: var(--font-family);
-  background-color: var(--background);
+  background-color: #F0F1F5;
 }
 @layer utilities {
   .bg-primaryy {

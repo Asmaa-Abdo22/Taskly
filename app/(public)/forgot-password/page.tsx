@@ -115,7 +115,7 @@ const Page = () => {
     }
   };
   return (
-    <div className="min-h-screen flex flex-col  items-center justify-center px-4 py-8">
+    <div className=" flex flex-col  items-center justify-center px-4 py-8">
       <form
         onSubmit={handleSubmit(sendResetLink)}
         className="formStyle bg-white w-full max-w-md p-8 md:p-15 items-center md:items-start"

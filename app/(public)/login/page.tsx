@@ -14,7 +14,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
-import { useSearchParams } from "next/navigation";
 
 const schema = z.object({
   email: z
@@ -32,8 +31,6 @@ const LoginPage = () => {
   const router = useRouter();
 
   const [isMobile, setIsMobile] = useState(false);
-  const searchParams = useSearchParams();
-  const from = searchParams.get("from");
   const {
     register,
     handleSubmit,
@@ -84,7 +81,7 @@ const LoginPage = () => {
       toast.success("Welcome to taskly");
 
       setTimeout(() => {
-        router.push(from || "/project");
+        router.push("/project");
       }, 2000);
     } catch (error) {
       toast.error("Error occurred");
@@ -167,8 +164,8 @@ const LoginPage = () => {
 
       {/* Remember Me */}
       {isMobile ? (
-        <div className="mb-4 w-75">
-          <div className="flex items-center gap-2">
+        <div className="mb-4 w-full">
+          <div className="flex items-center justify-between ">
             <input
               type="checkbox"
               id="remember-mobile"
@@ -177,15 +174,15 @@ const LoginPage = () => {
             />
             <label
               htmlFor="remember-mobile"
-              className="text-[13px] text-slate-700 cursor-pointer"
+              className="text-[10px] text-slate-700 cursor-pointer"
             >
               Remember Me
             </label>
           </div>
         </div>
       ) : (
-        <div className="flex gap-2 mb-4 md:w-120">
-          <div className="w-1/2 flex-1">
+        <div className="flex gap-2 mb-4 md:w-120 w-full">
+          <div className="w-1/2 flex-1 items-center">
             <input
               type="checkbox"
               id="remember"
@@ -226,7 +223,7 @@ const LoginPage = () => {
         />
       </button>
 
-      <p className="mt-50 md:mt-10 text-body-md mb-5">
+      <p className="mt-50 md:mt-7 text-body-md mb-7">
         <span className="text-slate-700 ">Don't Have an account?</span>{" "}
         <Link href="/sign-up" className="text-primaryy-container font-semibold">
           Sign Up

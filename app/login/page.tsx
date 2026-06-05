@@ -14,6 +14,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
+import { useSearchParams } from "next/navigation";
 
 const schema = z.object({
   email: z
@@ -31,6 +32,8 @@ const LoginPage = () => {
   const router = useRouter();
 
   const [isMobile, setIsMobile] = useState(false);
+  const searchParams = useSearchParams();
+  const from = searchParams.get("from");
   const {
     register,
     handleSubmit,
@@ -81,7 +84,7 @@ const LoginPage = () => {
       toast.success("Welcome to taskly");
 
       setTimeout(() => {
-        router.push("/project");
+        router.push(from || "/project");
       }, 2000);
     } catch (error) {
       toast.error("Error occurred");

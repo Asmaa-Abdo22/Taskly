@@ -26,7 +26,7 @@ const ForgotPasswordResendButton = ({
   return (
     <>
       <p className="w-full text-center text-[14px] text-label-sm text-slate-700 uppercase mb-4 hidden md:block">
-        Didn't receive the email?
+        Didn&apos;t receive the email?
       </p>
 
       <button

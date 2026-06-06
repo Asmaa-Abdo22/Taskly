@@ -2,6 +2,7 @@
 
 import { useEffect, useCallback } from "react";
 import Cookies from "js-cookie";
+import { refreshSession as refreshSessionAction } from "@/src/features/auth/api/refreshSession";
 
 const RefreshSessionProvider = ({
   children,
@@ -14,23 +15,9 @@ const RefreshSessionProvider = ({
 
     if (!refreshToken) return;
 
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_SUPABASE_URL}/auth/v1/token?grant_type=refresh_token`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          apikey: process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!,
-        },
-        body: JSON.stringify({
-          refresh_token: refreshToken,
-        }),
-      }
-    );
+    const { response, data } = await refreshSessionAction(refreshToken);
 
-    const data = await res.json();
-
-    if (res.ok) {
+    if (response.ok) {
       Cookies.set("access_token", data.access_token);
       Cookies.set("refresh_token", data.refresh_token);
     } else {

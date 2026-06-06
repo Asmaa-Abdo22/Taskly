@@ -14,9 +14,7 @@ import resetpass from "@/src/icons/resetpass.png";
 import greenRight from "@/src/icons/greenRight.png";
 import ForgotPasswordSuccess from "./ForgotPasswordSuccess";
 import ForgotPasswordResendButton from "./ForgotPasswordResendButton";
-import {
-  ForgotPasswordForm,
-} from "@/src/features/auth/schemas/forgotPasswordSchema";
+import type { ForgotPasswordForm } from "@/src/features/auth/types/auth.types";
 
 import { formatTimer } from "@/src/features/auth/utils/formatTimer";
 
@@ -64,7 +62,7 @@ const ForgotPasswordFormView = ({
           </h1>
 
           <p className="w-full text-center md:text-left text-[14px] text-slate-700 mb-8 mt-2">
-            No worries, we'll send you reset instructions.
+            No worries, we&apos;ll send you reset instructions.
           </p>
 
           <div className="w-full mb-6">
@@ -87,7 +85,7 @@ const ForgotPasswordFormView = ({
           </button>
 
           <Link
-            href="/auth/login"
+            href="/login"
             className="w-full flex items-center justify-center gap-2 text-primaryy font-medium mb-8 text-[14px]"
           >
             ← Back to log in
@@ -120,7 +118,7 @@ const ForgotPasswordFormView = ({
               />
 
               <p className="text-[#0A6B45] text-[12px] font-medium">
-                If an account exists with this email, we've sent a password
+                If an account exists with this email, we&apos;ve sent a password
                 reset link.
               </p>
             </div>
@@ -130,7 +128,7 @@ const ForgotPasswordFormView = ({
 
           <div className="two flex items-center justify-between mb-2">
             <p className="text-label-sm text-[#00523599] uppercase">
-              Didn't receive the email?
+              Didn&apos;t receive the email?
             </p>
 
             <button

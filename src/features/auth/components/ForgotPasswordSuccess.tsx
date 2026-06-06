@@ -14,7 +14,7 @@ const ForgotPasswordSuccess = () => {
       />
 
       <p className="text-[#0A6B45] text-[14px]">
-        If an account exists with this email, we've sent a password reset link.
+        If an account exists with this email, we&apos;ve sent a password reset link.
       </p>
     </div>
   );

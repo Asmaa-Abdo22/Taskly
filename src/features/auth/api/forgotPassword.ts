@@ -1,4 +1,4 @@
-"use server"
+"use server";
 export const sendResetLink = async (email: string) => {
   const response = await fetch(
     `${process.env.SUPABASE_URL}/auth/v1/recover`,

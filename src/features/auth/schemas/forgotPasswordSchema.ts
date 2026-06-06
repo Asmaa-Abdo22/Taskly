@@ -5,4 +5,3 @@ export const forgotPasswordSchema = z.object({
     .min(1, "Email cannot be empty")
     .email("Email format must be valid"),
 });
-export type ForgotPasswordForm = z.infer<typeof forgotPasswordSchema>;

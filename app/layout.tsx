@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import { Toaster } from "react-hot-toast";
 import "./globals.css";
 import RefreshSessionProvider from "@/src/providers/RefreshSession";
+import StoreProvider from "@/src/store/provider";
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-inter",
@@ -22,9 +23,9 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${inter.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col">
-       <RefreshSessionProvider>
-         {children}
-       </RefreshSessionProvider>
+        <StoreProvider>
+          <RefreshSessionProvider>{children}</RefreshSessionProvider>
+        </StoreProvider>
         <Toaster position="top-center" reverseOrder={false} />
       </body>
     </html>

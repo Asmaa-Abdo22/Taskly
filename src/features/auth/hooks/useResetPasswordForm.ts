@@ -51,13 +51,11 @@ export const useResetPasswordForm = () => {
       };
 
       const { response, result } = await updatePassword(userData, accessToken);
-      console.log("base url", process.env.NEXT_PUBLIC_SUPABASE_URL);
       if (!response.ok) {
-        toast.error("Failed");
+        toast.error(result?.message || "Failed to update password");
         return;
       }
       if (response.ok) {
-        console.log("response", result);
         toast.success(
           "Your password has been updated successfully. You can now log in",
         );
@@ -68,8 +66,7 @@ export const useResetPasswordForm = () => {
       }
     } catch (error) {
       console.error(error);
-      setLoading(false);
-      toast.error(" error occurred");
+      toast.error("Error occurred");
     } finally {
       setLoading(false);
     }

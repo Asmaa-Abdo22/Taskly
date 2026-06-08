@@ -38,17 +38,15 @@ export const useSignUpForm = () => {
         return;
       }
       if (response.ok) {
-        console.log("response", result);
         toast.success("Account created successfully!");
 
         setTimeout(() => {
-          router.replace("/project");
+          router.replace(result.access_token ? "/project" : "/login");
         }, 2500);
       }
     } catch (error) {
       console.error(error);
-      setLoading(false);
-      toast.error(" error occurred");
+      toast.error("Error occurred");
     } finally {
       setLoading(false);
     }

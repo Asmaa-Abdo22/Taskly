@@ -1,8 +1,8 @@
 "use client";
 
-import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
+import { getSessionStatus } from "@/src/features/auth/api/getSessionStatus";
 
 export default function Home() {
   const router = useRouter();
@@ -22,14 +22,14 @@ export default function Home() {
       }
     }
 
-    const token = Cookies.get("access_token");
-
-    if (token) {
-      router.replace("/project");
-    } else {
-      router.replace("/login");
-    }
-  }, []);
+    getSessionStatus()
+      .then(({ authenticated }) => {
+        router.replace(authenticated ? "/project" : "/login");
+      })
+      .catch(() => {
+        router.replace("/login");
+      });
+  }, [router]);
 
   return null;
 }

@@ -1,7 +1,6 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -35,22 +34,10 @@ export const useLoginForm = () => {
         return;
       }
 
-      const accessToken = result.access_token;
-      const refreshToken = result.refresh_token;
-      const user = result.user;
-
-      const isRemember = data.remember;
-
-      const cookieOptions = isRemember ? { expires: 30 } : undefined;
-
-      Cookies.set("access_token", accessToken, cookieOptions);
-      Cookies.set("refresh_token", refreshToken, cookieOptions);
-      Cookies.set("user", JSON.stringify(user), cookieOptions);
-
       toast.success("Welcome to taskly");
 
       setTimeout(() => {
-        router.push("/project");
+        router.replace("/project");
       }, 2000);
     } catch (error) {
       toast.error("Error occurred");

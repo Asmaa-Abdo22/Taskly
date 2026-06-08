@@ -1,11 +1,19 @@
 "use server";
 
-export const getCurrentUser = async (token: string) => {
+import { getAuthTokens } from "../../auth/utils/sessionCookies";
+
+export const getCurrentUser = async () => {
+  const { accessToken } = await getAuthTokens();
+
+  if (!accessToken) {
+    return { response: { ok: false }, result: null };
+  }
+
   const response = await fetch(`${process.env.SUPABASE_URL}/auth/v1/user`, {
     method: "GET",
     headers: {
       apikey: process.env.SUPABASE_PUBLISHABLE_KEY!,
-      Authorization: `Bearer ${token}`,
+      Authorization: `Bearer ${accessToken}`,
       "Content-Type": "application/json",
     },
   });

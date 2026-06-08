@@ -3,6 +3,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
 import { sendResetLink } from "../api/forgotPassword";
 import { MAX_RESEND_ATTEMPTS, RESET_LINK_TIMEOUT } from "../constants/auth.constants";
 import { forgotPasswordSchema } from "../schemas/forgotPasswordSchema";
@@ -40,6 +41,7 @@ export const useForgotPasswordForm = () => {
       setSeconds(RESET_LINK_TIMEOUT);
     } catch (error) {
       console.error(error);
+      toast.error("Failed to send reset link");
     }
   };
 
@@ -55,6 +57,7 @@ export const useForgotPasswordForm = () => {
       setSeconds(RESET_LINK_TIMEOUT);
     } catch (error) {
       console.error(error);
+      toast.error("Failed to resend reset link");
     }
   };
 

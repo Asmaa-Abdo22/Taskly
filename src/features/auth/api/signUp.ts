@@ -1,5 +1,6 @@
 "use server";
 import type { SignUpPayload } from "../types/auth.types";
+import { setAuthCookies } from "../utils/sessionCookies";
 
 export const signUpWithEmail = async (payload: SignUpPayload) => {
   const response = await fetch(
@@ -15,6 +16,13 @@ export const signUpWithEmail = async (payload: SignUpPayload) => {
   );
 
   const result = await response.json();
+
+  if (response.ok && result.access_token && result.refresh_token) {
+    await setAuthCookies({
+      accessToken: result.access_token,
+      refreshToken: result.refresh_token,
+    });
+  }
 
   return { response: { ok: response.ok }, result };
 };

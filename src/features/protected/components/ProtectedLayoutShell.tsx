@@ -7,6 +7,7 @@ import collapse from "@/src/icons/collapse.png";
 import icon from "@/src/icons/icon.png";
 import logout from "@/src/icons/logout.png";
 import { useProtectedLayout } from "../hooks/useProtectedLayout";
+import { useState } from "react";
 import { getAvatarInitials } from "../utils/getAvatarInitials";
 import { navItems } from "../utils/navItems";
 
@@ -19,6 +20,7 @@ export default function ProtectedLayoutShell({
     closeMobileMenu,
     handleLogout,
     isCollapsed,
+    isLoggingOut,
     isMobileMenuOpen,
     loading,
     pathname,
@@ -99,9 +101,10 @@ export default function ProtectedLayoutShell({
         </button>
         <button
           onClick={handleLogout}
+          disabled={isLoggingOut}
           className={`cursor-pointer flex items-center gap-3 px-3 py-2 rounded-md w-full text-[#BA1A1A] hover:bg-surface-low transition-colors ${
             isCollapsed ? "justify-center" : ""
-          }`}
+          } disabled:cursor-not-allowed disabled:opacity-60`}
         >
           <div className="  flex items-center justify-center">
             <Image src={logout} width={15} height={15} alt="collapse" />
@@ -219,7 +222,8 @@ export default function ProtectedLayoutShell({
           <div className="pb-6 px-2 flex flex-col mt-2">
             <button
               onClick={handleLogout}
-              className="cursor-pointer flex items-center gap-1 px-3 py-1 rounded-md w-full text-[#BA1A1A] hover:bg-background transition-colors"
+              disabled={isLoggingOut}
+              className="cursor-pointer flex items-center gap-1 px-3 py-1 rounded-md w-full text-[#BA1A1A] hover:bg-background transition-colors disabled:cursor-not-allowed disabled:opacity-60"
             >
               <div className="w-10 h-10 rounded-xs flex items-center justify-center">
                 <Image src={logout} width={15} height={15} alt="logout" />
@@ -263,11 +267,8 @@ export default function ProtectedLayoutShell({
                 {user.jobTitle}
               </p>
             </div>
-            <div className=" w-9 h-9 p-2 bg-[#0052CC] rounded-xl flex items-center justify-center">
-              <span className="text-white p-3 text-[16px] font-semibold">
-                {getAvatarInitials(user.name)}
-              </span>
-            </div>
+
+            <AvatarDropdown />
           </>
         )}
         {loading && (
@@ -276,6 +277,43 @@ export default function ProtectedLayoutShell({
       </div>
     </header>
   );
+
+  const AvatarDropdown = () => {
+    const [open, setOpen] = useState(false);
+
+    return (
+      <div className="relative">
+        <button
+          onClick={() => setOpen(!open)}
+          className=" w-9 h-9 p-2 bg-[#0052CC] rounded-xl flex items-center justify-center cursor-pointer"
+          aria-haspopup="true"
+          aria-expanded={open}
+        >
+          <span className="text-white p-3 text-[16px] font-semibold">
+            {getAvatarInitials(user?.name || "")}
+          </span>
+        </button>
+
+        {open && (
+          <div className="absolute right-0 mt-2 w-44 bg-white rounded-md shadow-lg z-50">
+            <button
+              onClick={() => {
+                setOpen(false);
+                handleLogout();
+              }}
+              disabled={isLoggingOut}
+              className="w-full cursor-pointer text-left px-4 py-2 text-sm text-[#BA1A1A] hover:bg-surface-low disabled:cursor-not-allowed disabled:opacity-60"
+            >
+             <div className="flex gap-2">
+               <Image src={logout} width={15} height={15} alt="collapse" />
+              <span className="text-body-md font-medium">Logout</span>
+            </div>
+            </button>
+          </div>
+        )}
+      </div>
+    );
+  };
 
   return (
     <div className="flex flex-col min-h-screen bg-[#F9F9FF]">

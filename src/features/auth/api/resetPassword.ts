@@ -1,6 +1,14 @@
 "use server";
 import type { ResetPasswordPayload } from "../types/auth.types";
 
+const parseResponse = async (response: Response) => {
+  try {
+    return await response.json();
+  } catch {
+    return null;
+  }
+};
+
 export const updatePassword = async (
   payload: ResetPasswordPayload,
   accessToken: string,
@@ -18,7 +26,7 @@ export const updatePassword = async (
     },
   );
 
-  const result = await response.json();
+  const result = await parseResponse(response);
 
   return { response: { ok: response.ok }, result };
 };

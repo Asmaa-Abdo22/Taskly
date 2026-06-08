@@ -87,6 +87,7 @@ const ResetPasswordForm = () => {
 
             <button
               type="submit"
+              disabled={loading}
               className="btn btn-primaryy text-[16px] font-medium md:w-120 w-full mt-2 mb-7"
             >
               {loading ? <LoadingSpinner /> : "Update Password"}

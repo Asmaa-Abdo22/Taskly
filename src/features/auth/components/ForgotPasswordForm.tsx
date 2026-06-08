@@ -11,6 +11,7 @@ const ForgotPasswordForm = () => {
     handleResend,
     onSubmit,
     resendCount,
+    resending,
     seconds,
     success,
   } = useForgotPasswordForm();
@@ -24,6 +25,7 @@ const ForgotPasswordForm = () => {
       success={success}
       seconds={seconds}
       resendCount={resendCount}
+      resending={resending}
       onSubmit={onSubmit}
       handleResend={handleResend}
     />

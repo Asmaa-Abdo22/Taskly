@@ -13,6 +13,7 @@ export const useForgotPasswordForm = () => {
   const [success, setSuccess] = useState(false);
   const [seconds, setSeconds] = useState(0);
   const [resendCount, setResendCount] = useState(0);
+  const [resending, setResending] = useState(false);
   const [savedEmail, setSavedEmail] = useState("");
 
   const form = useForm<ForgotPasswordForm>({
@@ -39,6 +40,7 @@ export const useForgotPasswordForm = () => {
       setSavedEmail(data.email);
       setSuccess(true);
       setSeconds(RESET_LINK_TIMEOUT);
+      setResendCount(0);
     } catch (error) {
       console.error(error);
       toast.error("Failed to send reset link");
@@ -50,6 +52,8 @@ export const useForgotPasswordForm = () => {
       return;
     }
 
+    setResending(true);
+
     try {
       await sendResetLink(savedEmail);
 
@@ -58,6 +62,8 @@ export const useForgotPasswordForm = () => {
     } catch (error) {
       console.error(error);
       toast.error("Failed to resend reset link");
+    } finally {
+      setResending(false);
     }
   };
 
@@ -66,6 +72,7 @@ export const useForgotPasswordForm = () => {
     handleResend,
     onSubmit,
     resendCount,
+    resending,
     seconds,
     success,
   };

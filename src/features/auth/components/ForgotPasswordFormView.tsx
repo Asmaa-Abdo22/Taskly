@@ -26,6 +26,7 @@ interface Props {
   success: boolean;
   seconds: number;
   resendCount: number;
+  resending: boolean;
   onSubmit: (data: ForgotPasswordForm) => Promise<void>;
   handleResend: () => Promise<void>;
 }
@@ -38,6 +39,7 @@ const ForgotPasswordFormView = ({
   success,
   seconds,
   resendCount,
+  resending,
   onSubmit,
   handleResend,
 }: Props) => {
@@ -99,7 +101,7 @@ const ForgotPasswordFormView = ({
             <ForgotPasswordResendButton
               seconds={seconds}
               resendCount={resendCount}
-              loading={isSubmitting}
+              loading={isSubmitting || resending}
               onResend={handleResend}
             />
           )}
@@ -133,7 +135,7 @@ const ForgotPasswordFormView = ({
 
             <button
               onClick={handleResend}
-              disabled={seconds > 0 || resendCount >= 3 || isSubmitting}
+              disabled={seconds > 0 || resendCount >= 3 || isSubmitting || resending}
               type="button"
               className="text-label-sm uppercase cursor-pointer text-primaryy font-semibold"
             >

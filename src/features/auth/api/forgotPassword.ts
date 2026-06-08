@@ -1,4 +1,13 @@
 "use server";
+
+const parseResponse = async (response: Response) => {
+  try {
+    return await response.json();
+  } catch {
+    return null;
+  }
+};
+
 export const sendResetLink = async (email: string) => {
   const response = await fetch(
     `${process.env.SUPABASE_URL}/auth/v1/recover`,
@@ -12,10 +21,10 @@ export const sendResetLink = async (email: string) => {
     },
   );
 
-  const result = await response.json();
+  const result = await parseResponse(response);
 
   if (!response.ok) {
-    throw new Error(result.message || "Failed to send reset link");
+    throw new Error(result?.message || "Failed to send reset link");
   }
 
   return result;

@@ -17,7 +17,9 @@ const ForgotPasswordResendButton = ({
   onResend,
 }: Props) => {
   const text =
-    seconds > 0
+    loading
+      ? "Sending..."
+      : seconds > 0
       ? `Resend in ${formatTimer(seconds)}`
       : resendCount >= MAX_RESEND_ATTEMPTS
         ? "No more attempts"

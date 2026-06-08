@@ -24,14 +24,24 @@ export const useResetPasswordForm = () => {
   const password = form.watch("password", "");
 
   useEffect(() => {
+    const searchParams = new URLSearchParams(window.location.search);
+    const queryToken = searchParams.get("access_token");
+
+    if (queryToken) {
+      setAccessToken(queryToken);
+      setLoadingToken(false);
+      return;
+    }
+
     const hash = window.location.hash;
 
     if (hash) {
       const params = new URLSearchParams(hash.slice(1));
 
       const token = params.get("access_token");
+      const type = params.get("type");
 
-      if (token) {
+      if (token && (!type || type === "recovery")) {
         setAccessToken(token);
       }
     }

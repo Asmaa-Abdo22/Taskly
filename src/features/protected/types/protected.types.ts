@@ -17,3 +17,9 @@ export interface addNewProjectData {
   name: string;
   description?: string;
 }
+export interface getAllProjects {
+  name: string;
+  description?: string;
+  created_at: string;
+  id?: number;
+}

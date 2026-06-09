@@ -1,7 +1,9 @@
+import ListAllProjectsPage from "@/src/features/protected/components/ListAllProjectsPage";
+
 export default function ProjectPage() {
   return (
     <>
-      <h1> list all Projects </h1>
+     <ListAllProjectsPage/>
     </>
   );
 }

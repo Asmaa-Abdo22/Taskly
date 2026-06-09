@@ -23,3 +23,14 @@ export interface getAllProjects {
   created_at: string;
   id?: number;
 }
+
+export interface ProjectsPaginationParams {
+  limit: number;
+  offset: number;
+}
+
+export interface ProjectsPaginationMeta {
+  totalCount: number;
+  startIndex: number | null;
+  endIndex: number | null;
+}

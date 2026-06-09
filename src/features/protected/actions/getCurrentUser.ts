@@ -2,6 +2,14 @@
 
 import { getAuthTokens } from "../../auth/utils/sessionCookies";
 
+const parseResponse = async (response: Response) => {
+  try {
+    return await response.json();
+  } catch {
+    return null;
+  }
+};
+
 export const getCurrentUser = async () => {
   const { accessToken } = await getAuthTokens();
 
@@ -18,7 +26,7 @@ export const getCurrentUser = async () => {
     },
   });
 
-  const result = await response.json();
+  const result = await parseResponse(response);
 
   return { response: { ok: response.ok }, result };
 };

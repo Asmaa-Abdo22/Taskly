@@ -2,6 +2,14 @@
 import type { SignUpPayload } from "../types/auth.types";
 import { setAuthCookies } from "../utils/sessionCookies";
 
+const parseResponse = async (response: Response) => {
+  try {
+    return await response.json();
+  } catch {
+    return null;
+  }
+};
+
 export const signUpWithEmail = async (payload: SignUpPayload) => {
   const response = await fetch(
     `${process.env.SUPABASE_URL}/auth/v1/signup`,
@@ -15,9 +23,9 @@ export const signUpWithEmail = async (payload: SignUpPayload) => {
     },
   );
 
-  const result = await response.json();
+  const result = await parseResponse(response);
 
-  if (response.ok && result.access_token && result.refresh_token) {
+  if (response.ok && result?.access_token && result?.refresh_token) {
     await setAuthCookies({
       accessToken: result.access_token,
       refreshToken: result.refresh_token,

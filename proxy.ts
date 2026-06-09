@@ -60,7 +60,13 @@ const refreshAccessToken = async (refreshToken: string) => {
     return null;
   }
 
-  const data = await response.json();
+  let data = null;
+
+  try {
+    data = await response.json();
+  } catch {
+    return null;
+  }
 
   if (!data.access_token || !data.refresh_token) {
     return null;

@@ -1,7 +1,7 @@
 "use client";
 import Image from "next/image";
 import noValidate from "@/src/icons/noValidate.png";
-
+import ErrorIcon from "@/src/icons/error.svg";
 interface InputFieldProps {
   label: string;
   id: string;
@@ -35,13 +35,16 @@ export default function InputField({
         {...rest}
       />
 
-      {error && error.length === 1 && (
-        <p className="text-label-sm text-error mt-1">{error}</p>
+      {error && !error.includes(",") && (
+        <div className="flex gap-1 items-center mt-1">
+          <ErrorIcon alt="error icon" width={13} height={13} />
+          <p className="text-label-sm text-error">{error}</p>
+        </div>
       )}
 
-      {error && error.length > 1 && (
-        <p className="bg-surface-low text-[#434654] text-[11px] mt-2 flex flex-col gap-1 p-2 rounded">
-          {error.split(",").map((err: string, index: number) => (
+      {error && error.includes(",") && (
+        <p className="bg-surface-low text-error text-[11px] mt-2 flex flex-col gap-1 p-2 rounded">
+          {error.split(",").map((err: any, index: number) => (
             <span key={index} className="flex items-center gap-2">
               <Image src={noValidate} alt="" width={12} height={12} />
               {err.trim()}

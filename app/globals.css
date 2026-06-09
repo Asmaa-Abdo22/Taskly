@@ -90,6 +90,9 @@ body {
   .bg-slate-700 {
     background-color: var(--slate-700);
   }
+  .text-slate-600 {
+    color: #43465499;
+  }
   .text-slate-300 {
     color: var(--slate-300);
   }
@@ -123,6 +126,12 @@ body {
   .text-headline-lg {
     font-size: var(--headline-lg-size);
     font-weight: var(--headline-lg-weight);
+  }
+  .headlineLgWeight{
+        font-weight: var(--headline-lg-weight);
+  }
+  .bodyMdWeight{
+        font-weight: var(--body-md-weight);
   }
 
   .text-title-md {

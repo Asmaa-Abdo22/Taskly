@@ -2,6 +2,14 @@
 
 import { clearAuthCookies, getAuthTokens, setAuthCookies } from "../utils/sessionCookies";
 
+const parseResponse = async (response: Response) => {
+  try {
+    return await response.json();
+  } catch {
+    return null;
+  }
+};
+
 export const refreshSession = async () => {
   const { refreshToken } = await getAuthTokens();
 
@@ -24,9 +32,9 @@ export const refreshSession = async () => {
     },
   );
 
-  const data = await response.json();
+  const data = await parseResponse(response);
 
-  if (response.ok && data.access_token && data.refresh_token) {
+  if (response.ok && data?.access_token && data?.refresh_token) {
     await setAuthCookies({
       accessToken: data.access_token,
       refreshToken: data.refresh_token,

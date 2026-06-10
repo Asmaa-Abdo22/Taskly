@@ -90,7 +90,7 @@ const SignUpForm = () => {
             <PasswordRequirements
               password={password}
               rules={rules}
-              className="mt-2 flex flex-col gap-1 bg-surface-highest w-120 p-3 rounded"
+              className="mt-2 flex flex-col gap-1 bg-surface-highest md:w-120 p-3 rounded"
             />
           )}
         </div>
@@ -112,7 +112,11 @@ const SignUpForm = () => {
         </div>
       </div>
 
-      <button className="btn btn-primaryy md:w-120 w-full mt-2 mb-7">
+      <button
+        type="submit"
+        disabled={loading}
+        className="btn btn-primaryy  disabled:cursor-not-allowed md:w-120 w-full mt-2 mb-7"
+      >
         {loading ? <LoadingSpinner /> : "Create Account"}
       </button>
 

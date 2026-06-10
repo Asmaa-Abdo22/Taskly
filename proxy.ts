@@ -11,7 +11,7 @@ const PUBLIC_PATHS = [
   "/reset-password",
 ];
 
-const PROTECTED_PATHS = ["/project", "/epics", "/tasks", "/members", "/details"];
+const PROTECTED_PATHS = ["/project", "/epics", "/tasks", "/members", "/edit"];
 
 const isPublicPath = (pathname: string) =>
   PUBLIC_PATHS.some((path) => pathname === path || pathname.startsWith(path + "/"));
@@ -23,6 +23,7 @@ const redirectToLogin = (req: NextRequest) => {
 
   response.cookies.delete(AUTH_COOKIE_NAMES.accessToken);
   response.cookies.delete(AUTH_COOKIE_NAMES.refreshToken);
+  response.cookies.delete(AUTH_COOKIE_NAMES.rememberSession);
   response.cookies.delete("user");
 
   return response;
@@ -136,7 +137,9 @@ export async function proxy(req: NextRequest) {
       headers: requestHeaders,
     },
   });
-  const cookieOptions = getAuthCookieOptions();
+  const cookieOptions = getAuthCookieOptions(
+    req.cookies.get(AUTH_COOKIE_NAMES.rememberSession)?.value === "true",
+  );
 
   response.cookies.set(
     AUTH_COOKIE_NAMES.accessToken,

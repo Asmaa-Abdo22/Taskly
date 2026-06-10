@@ -36,14 +36,15 @@ export const useForgotPasswordForm = () => {
   const onSubmit = async (data: ForgotPasswordForm) => {
     try {
       await sendResetLink(data.email);
-
+    } catch {
+      toast.success(
+        "If an account exists with this email, we’ve sent a password reset link.",
+      );
+    } finally {
       setSavedEmail(data.email);
       setSuccess(true);
       setSeconds(RESET_LINK_TIMEOUT);
       setResendCount(0);
-    } catch (error) {
-      console.error(error);
-      toast.error("Failed to send reset link");
     }
   };
 
@@ -56,13 +57,13 @@ export const useForgotPasswordForm = () => {
 
     try {
       await sendResetLink(savedEmail);
-
+    } catch {
+      toast.success(
+        "If an account exists with this email, we’ve sent a password reset link.",
+      );
+    } finally {
       setResendCount((prev) => prev + 1);
       setSeconds(RESET_LINK_TIMEOUT);
-    } catch (error) {
-      console.error(error);
-      toast.error("Failed to resend reset link");
-    } finally {
       setResending(false);
     }
   };

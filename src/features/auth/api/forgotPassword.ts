@@ -23,9 +23,5 @@ export const sendResetLink = async (email: string) => {
 
   const result = await parseResponse(response);
 
-  if (!response.ok) {
-    throw new Error(result?.message || "Failed to send reset link");
-  }
-
-  return result;
+  return { response: { ok: response.ok }, result };
 };

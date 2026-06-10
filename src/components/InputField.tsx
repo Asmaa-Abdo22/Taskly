@@ -31,7 +31,7 @@ export default function InputField({
         id={id}
         type={type}
         placeholder={placeholder}
-        className={`w-full placeholder:text-[#737685] px-3 py-2 text-body-md text-slate-900 bg-surface-highest border-transparent rounded-md focus:outline-none focus:ring-1 focus:ring-primaryy/50 transition-colors `}
+        className={`w-full placeholder:text-[#737685] px-3 py-2 text-body-md text-slate-900 bg-surface-highest border-transparent rounded-md focus:outline-none transition-colors `}
         {...rest}
       />
 

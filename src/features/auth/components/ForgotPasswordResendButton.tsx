@@ -35,7 +35,7 @@ const ForgotPasswordResendButton = ({
         type="button"
         onClick={onResend}
         disabled={seconds > 0 || resendCount >= MAX_RESEND_ATTEMPTS || loading}
-        className="w-full bg-surface-low rounded-md py-4 text-[#737685] font-semibold hidden md:flex items-center justify-center gap-3 cursor-pointer disabled:opacity-50"
+        className="w-full bg-surface-low rounded-md py-4 text-[#737685] font-semibold hidden md:flex items-center justify-center gap-3 cursor-pointer disabled:opacity-50  disabled:cursor-not-allowed"
       >
         <Image src={clock} alt="clock icon" width={15} height={15} />
         <span className="text-[16px]">{text}</span>

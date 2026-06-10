@@ -16,7 +16,6 @@ export default function Home() {
       const type = params.get("type");
 
       if (type === "recovery" && token) {
-        // keep the hash when navigating so reset-password can read it
         router.replace(`/reset-password${hash}`);
         return;
       }

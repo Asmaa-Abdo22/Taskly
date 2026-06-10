@@ -17,6 +17,7 @@ import ForgotPasswordResendButton from "./ForgotPasswordResendButton";
 import type { ForgotPasswordForm } from "@/src/features/auth/types/auth.types";
 
 import { formatTimer } from "@/src/features/auth/utils/formatTimer";
+import { RESET_PASSWORD_SUCCESS_MESSAGE } from "../constants/auth.constants";
 
 interface Props {
   register: UseFormRegister<ForgotPasswordForm>;
@@ -43,11 +44,12 @@ const ForgotPasswordFormView = ({
   onSubmit,
   handleResend,
 }: Props) => {
-  return (
-    <div className="flex flex-col items-center justify-center px-4 py-8">
+  return <>
+  <div className="min-h-21.25 flex justify-center items-center overflow-y-hidden ">
+     <div className="flex  mt-10 md:w-[35%] flex-col items-center justify-center px-4">
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="formStyle bg-white w-full max-w-md p-8 md:p-15 items-center md:items-start"
+        className="formStyle bg-white w-full p-8 md:p-15 items-center md:items-start"
       >
         <div className="md:w-[85%] mx-auto my-3 px-4 md:px-0">
           <div className="iconReset bg-surface-highest w-fit mx-auto my-3 p-3 rounded-xl flex md:hidden items-center justify-center">
@@ -80,7 +82,7 @@ const ForgotPasswordFormView = ({
 
           <button
             type="submit"
-            className="btn btn-primaryy text-[14px] md:text-[16px] w-full mb-8 md:mb-6"
+            className="btn btn-primaryy text-[14px] md:text-[16px] w-full mb-8 md:mb-6 cursor-pointer  disabled:cursor-not-allowed"
             disabled={isSubmitting}
           >
             {isSubmitting ? <LoadingSpinner /> : "Send Reset Link"}
@@ -109,7 +111,7 @@ const ForgotPasswordFormView = ({
       </form>
 
       {success && (
-        <div className="mobileGreenBox mt-5 mb-22 bg-[#82F9BE4D] w-full max-w-md flex flex-col md:hidden px-3">
+        <div className="mobileGreenBox mt-5  bg-[#82F9BE4D] w-full max-w-md flex flex-col md:hidden px-3">
           <div className="one">
             <div className="rounded-lg pt-3 flex items-start justify-between gap-2">
               <Image
@@ -120,8 +122,7 @@ const ForgotPasswordFormView = ({
               />
 
               <p className="text-[#0A6B45] text-[12px] font-medium">
-                If an account exists with this email, we&apos;ve sent a password
-                reset link.
+                {RESET_PASSWORD_SUCCESS_MESSAGE}
               </p>
             </div>
           </div>
@@ -137,7 +138,7 @@ const ForgotPasswordFormView = ({
               onClick={handleResend}
               disabled={seconds > 0 || resendCount >= 3 || isSubmitting || resending}
               type="button"
-              className="text-label-sm uppercase cursor-pointer text-primaryy font-semibold"
+              className="text-label-sm uppercase cursor-pointer text-primaryy font-semibold  disabled:cursor-not-allowed"
             >
               <span>
                 {seconds > 0
@@ -151,7 +152,8 @@ const ForgotPasswordFormView = ({
         </div>
       )}
     </div>
-  );
+  </div>
+  </>
 };
 
 export default ForgotPasswordFormView;

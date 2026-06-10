@@ -15,7 +15,14 @@ export const useLoginForm = () => {
   const [isMobile] = useState(false);
   const router = useRouter();
 
-  const form = useForm<LoginForm>({ resolver: zodResolver(loginSchema) });
+  const form = useForm<LoginForm>({
+    resolver: zodResolver(loginSchema),
+    defaultValues: {
+      email: "",
+      password: "",
+      remember: false,
+    },
+  });
 
   const login = async (data: LoginForm) => {
     setLoading(true);
@@ -26,7 +33,7 @@ export const useLoginForm = () => {
         password: data.password,
       };
 
-      const { response, result } = await loginWithPassword(userData);
+      const { response } = await loginWithPassword(userData, Boolean(data.remember));
 
       if (!response.ok) {
         toast.error("Invalid email or password");
@@ -35,8 +42,8 @@ export const useLoginForm = () => {
       }
 
       toast.success("Welcome to taskly");
-      router.replace("/project");
-    } catch (error) {
+      router.replace("/");
+    } catch {
       toast.error("Error occurred");
     } finally {
       setLoading(false);

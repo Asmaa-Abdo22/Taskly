@@ -11,7 +11,7 @@ const parseResponse = async (response: Response) => {
 };
 
 export const refreshSession = async () => {
-  const { refreshToken } = await getAuthTokens();
+  const { refreshToken, rememberSession } = await getAuthTokens();
 
   if (!refreshToken) {
     await clearAuthCookies();
@@ -35,10 +35,13 @@ export const refreshSession = async () => {
   const data = await parseResponse(response);
 
   if (response.ok && data?.access_token && data?.refresh_token) {
-    await setAuthCookies({
-      accessToken: data.access_token,
-      refreshToken: data.refresh_token,
-    });
+    await setAuthCookies(
+      {
+        accessToken: data.access_token,
+        refreshToken: data.refresh_token,
+      },
+      rememberSession,
+    );
   } else {
     await clearAuthCookies();
   }

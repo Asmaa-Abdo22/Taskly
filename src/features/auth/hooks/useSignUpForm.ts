@@ -16,7 +16,16 @@ export const useSignUpForm = () => {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const form = useForm<SignUpForm>({ resolver: zodResolver(signUpSchema) });
+  const form = useForm<SignUpForm>({
+    resolver: zodResolver(signUpSchema),
+    defaultValues: {
+      name: "",
+      email: "",
+      jobTitle: "",
+      password: "",
+      confirmPassword: "",
+    },
+  });
 
   const password = form.watch("password", "");
 
@@ -34,18 +43,17 @@ export const useSignUpForm = () => {
 
       const { response, result } = await signUpWithEmail(userData);
       if (!response.ok) {
-        toast.error(result.msg || "Failed to create account");
+        toast.error(result?.msg || result?.message || "Failed to create account");
         return;
       }
       if (response.ok) {
         toast.success("Account created successfully!");
 
         setTimeout(() => {
-          router.replace(result.access_token ? "/project" : "/login");
+          router.replace("/project");
         }, 2500);
       }
-    } catch (error) {
-      console.error(error);
+    } catch {
       toast.error("Error occurred");
     } finally {
       setLoading(false);

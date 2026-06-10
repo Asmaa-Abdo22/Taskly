@@ -24,39 +24,43 @@ export default function RouteState({
 }: RouteStateProps) {
   const actionClassName = "btn btn-primaryy text-[14px] md:text-[16px]";
 
-  return (
-    <div
-      className={`flex min-h-[55vh] w-full items-center justify-center px-4 ${className}`}
-    >
-      <div className="formStyle bg-white w-full max-w-md p-8 md:p-12 items-center text-center">
-        {loading && (
-          <div className="mb-4">
-            <LoadingSpinner />
-          </div>
-        )}
+ return (
+  <div
+    className={`flex min-h-[85vh] items-center justify-center px-4 ${className}`}
+  >
+    <div className=" bg-white w-full max-w-lg min-h-80 md:min-h-95 p-8 md:p-12 flex flex-col items-center justify-center text-center">
+      {loading && (
+        <div className="mb-6">
+          <LoadingSpinner />
+        </div>
+      )}
 
-        <h1 className="text-[24px] md:text-headline-lg font-semibold text-slate-900">
-          {title}
-        </h1>
+      <h1 className="text-[24px] md:text-headline-lg font-semibold text-slate-900">
+        {title}
+      </h1>
 
-        {description && (
-          <p className="text-[14px] text-slate-700 mt-2 mb-6">
-            {description}
-          </p>
-        )}
+      {description && (
+        <p className="mt-3 mb-8 max-w-sm text-[14px] text-slate-700">
+          {description}
+        </p>
+      )}
 
-        {actionLabel && actionHref && (
-          <Link href={actionHref} className={actionClassName}>
-            {actionLabel}
-          </Link>
-        )}
+      {actionLabel && actionHref && (
+        <Link href={actionHref} className={actionClassName}>
+          {actionLabel}
+        </Link>
+      )}
 
-        {actionLabel && onAction && (
-          <button type="button" onClick={onAction} className={actionClassName}>
-            {actionLabel}
-          </button>
-        )}
-      </div>
+      {actionLabel && onAction && (
+        <button
+          type="button"
+          onClick={onAction}
+          className={actionClassName}
+        >
+          {actionLabel}
+        </button>
+      )}
     </div>
-  );
+  </div>
+);
 }

@@ -1,15 +1,19 @@
 import { z } from "zod";
+import { passwordValidation } from "../utils/authValidation";
 
 const resetPasswordBaseSchema = z.object({
   password: z
     .string()
-    .min(8, "Password must be at least 8 characters")
-    .max(64, "Password must be at most 64 characters")
-    .regex(/^\S+$/, "Password must not contain spaces")
-    .regex(/[A-Z]/, "Must contain uppercase letter")
-    .regex(/[a-z]/, "Must contain lowercase letter")
-    .regex(/[0-9]/, "Must contain a number")
-    .regex(/[!@#$%^&*]/, "Must contain special character"),
+    .min(passwordValidation.minLength, "Password must be at least 8 characters")
+    .max(passwordValidation.maxLength, "Password must be at most 64 characters")
+    .regex(passwordValidation.noWhitespace, "Password must not contain spaces")
+    .regex(passwordValidation.uppercase, "Must contain uppercase letter")
+    .regex(passwordValidation.lowercase, "Must contain lowercase letter")
+    .regex(passwordValidation.number, "Must contain a number")
+    .regex(
+      passwordValidation.specialCharacter,
+      "Must contain special character",
+    ),
   confirmPassword: z.string(),
 });
 

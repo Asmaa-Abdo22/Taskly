@@ -16,23 +16,19 @@ export const useResetPasswordForm = () => {
   const [loading, setLoading] = useState(false);
   const [accessToken, setAccessToken] = useState<string | null>(null);
   const [loadingToken, setLoadingToken] = useState(true);
+  const [successMessage, setSuccessMessage] = useState("");
 
   const form = useForm<ResetPasswordForm>({
     resolver: zodResolver(resetPasswordSchema),
+    defaultValues: {
+      password: "",
+      confirmPassword: "",
+    },
   });
 
   const password = form.watch("password", "");
 
   useEffect(() => {
-    const searchParams = new URLSearchParams(window.location.search);
-    const queryToken = searchParams.get("access_token");
-
-    if (queryToken) {
-      setAccessToken(queryToken);
-      setLoadingToken(false);
-      return;
-    }
-
     const hash = window.location.hash;
 
     if (hash) {
@@ -41,7 +37,7 @@ export const useResetPasswordForm = () => {
       const token = params.get("access_token");
       const type = params.get("type");
 
-      if (token && (!type || type === "recovery")) {
+      if (token && type === "recovery") {
         setAccessToken(token);
       }
     }
@@ -66,16 +62,17 @@ export const useResetPasswordForm = () => {
         return;
       }
       if (response.ok) {
-        toast.success(
-          "Your password has been updated successfully. You can now log in",
-        );
+        const message =
+          "Your password has been updated successfully. You can now log in";
+
+        setSuccessMessage(message);
+        toast.success(message);
 
         setTimeout(() => {
           router.replace("/login");
         }, 3000);
       }
-    } catch (error) {
-      console.error(error);
+    } catch {
       toast.error("Error occurred");
     } finally {
       setLoading(false);
@@ -93,5 +90,6 @@ export const useResetPasswordForm = () => {
     setShowPassword,
     showPassword,
     showRules: password.length > 0,
+    successMessage,
   };
 };

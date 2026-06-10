@@ -21,13 +21,14 @@ const ResetPasswordForm = () => {
     setShowPassword,
     showPassword,
     showRules,
+    successMessage,
   } = useResetPasswordForm();
 
   if (loadingToken) {
     return <LoadingSpinner />;
   }
   if (!accessToken) {
-    return <p className="text-red-500">Invalid or expired reset link.</p>;
+    return <p className="text-red-500">Invalid or expired reset link</p>;
   }
   if (accessToken) {
     return (
@@ -87,11 +88,17 @@ const ResetPasswordForm = () => {
 
             <button
               type="submit"
-              disabled={loading}
-              className="btn btn-primaryy text-[16px] font-medium md:w-120 w-full mt-2 mb-7"
+              disabled={loading || Boolean(successMessage)}
+              className="btn btn-primaryy disabled:cursor-not-allowed text-[16px] font-medium md:w-120 w-full mt-2 mb-7"
             >
               {loading ? <LoadingSpinner /> : "Update Password"}
             </button>
+
+            {successMessage && (
+              <p className="mb-3 text-[13px] text-center text-[#0A6B45]">
+                {successMessage}
+              </p>
+            )}
 
             <p className="mb-3 text-[13px]  text-center hidden md:block">
               <Link
@@ -114,6 +121,8 @@ const ResetPasswordForm = () => {
       </>
     );
   }
+
+  return null;
 };
 
 export default ResetPasswordForm;

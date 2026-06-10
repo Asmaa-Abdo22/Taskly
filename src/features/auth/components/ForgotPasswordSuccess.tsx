@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import greenRight from "@/src/icons/greenRight.png";
+import { RESET_PASSWORD_SUCCESS_MESSAGE } from "../constants/auth.constants";
 
 const ForgotPasswordSuccess = () => {
   return (
@@ -14,7 +15,7 @@ const ForgotPasswordSuccess = () => {
       />
 
       <p className="text-[#0A6B45] text-[14px]">
-        If an account exists with this email, we&apos;ve sent a password reset link.
+        {RESET_PASSWORD_SUCCESS_MESSAGE}
       </p>
     </div>
   );

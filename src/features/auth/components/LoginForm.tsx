@@ -34,7 +34,6 @@ const LoginForm = () => {
         Please enter your details to access your workspace
       </p>
 
-      {/* Email */}
       <div className="emailInput mb-4 w-full md:w-120 relative">
         <InputField
           label="Email Address"
@@ -54,7 +53,6 @@ const LoginForm = () => {
         />
       </div>
 
-      {/* Password */}
       <div className="passwordInput w-full md:w-120 relative mb-4">
         <div className="flex justify-between items-center">
           <label
@@ -73,7 +71,7 @@ const LoginForm = () => {
           id="password"
           placeholder="Enter your password"
           type={showPassword ? "text" : "password"}
-          className="w-full px-3 py-2 text-body-md bg-surface-highest rounded-md"
+          className="w-full px-3 py-2 text-body-md bg-surface-highest rounded-md border-transparent focus:outline-none  transition-colors"
           {...register("password")}
         />
 
@@ -89,7 +87,6 @@ const LoginForm = () => {
         )}
       </div>
 
-      {/* Remember Me */}
       {isMobile ? (
         <div className="mb-4 w-full">
           <div className="flex items-center justify-between ">
@@ -126,16 +123,19 @@ const LoginForm = () => {
           </div>
         </div>
       )}
-      {/* Desktop Button */}
       <button
         type="submit"
-        className="btn btn-primaryy hidden md:block md:w-120"
+        disabled={loading}
+        className="btn btn-primaryy cursor-pointer  disabled:cursor-not-allowed hidden md:block md:w-120"
       >
         {loading ? <LoadingSpinner /> : "Log In"}
       </button>
 
-      {/* Mobile Button */}
-      <button type="submit" className="btn btn-primaryy md:hidden w-80 relative">
+      <button
+        type="submit"
+        disabled={loading}
+        className="btn btn-primaryy md:hidden w-80 relative"
+      >
         {loading ? <LoadingSpinner /> : "Sign In"}
 
         <Image

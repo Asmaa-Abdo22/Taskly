@@ -52,8 +52,7 @@ export const useProtectedLayout = (initialUser: UserData) => {
 
       toast.success("Logged out");
       router.replace("/login");
-    } catch (error) {
-      console.error("Logout error:", error);
+    } catch {
       toast.error("Logout failed, please try again.");
     } finally {
       setIsLoggingOut(false);

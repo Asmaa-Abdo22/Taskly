@@ -35,7 +35,7 @@ export const useForgotPasswordForm = () => {
 
   const onSubmit = async (data: ForgotPasswordForm) => {
     try {
-      await sendResetLink(data.email);
+      await sendResetLink(data);
     } catch {
       toast.success(
         "If an account exists with this email, we’ve sent a password reset link.",
@@ -56,7 +56,7 @@ export const useForgotPasswordForm = () => {
     setResending(true);
 
     try {
-      await sendResetLink(savedEmail);
+      await sendResetLink({ email: savedEmail });
     } catch {
       toast.success(
         "If an account exists with this email, we’ve sent a password reset link.",

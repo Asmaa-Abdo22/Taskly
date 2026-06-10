@@ -1,5 +1,7 @@
 "use server";
 
+import type { ForgotPasswordPayload } from "../types/auth.types";
+
 const parseResponse = async (response: Response) => {
   try {
     return await response.json();
@@ -8,7 +10,7 @@ const parseResponse = async (response: Response) => {
   }
 };
 
-export const sendResetLink = async (email: string) => {
+export const sendResetLink = async (data: ForgotPasswordPayload) => {
   const response = await fetch(
     `${process.env.SUPABASE_URL}/auth/v1/recover`,
     {
@@ -17,7 +19,7 @@ export const sendResetLink = async (email: string) => {
         "Content-Type": "application/json",
         apikey: process.env.SUPABASE_PUBLISHABLE_KEY!,
       },
-      body: JSON.stringify({ email }),
+      body: JSON.stringify({ email: data.email }),
     },
   );
 

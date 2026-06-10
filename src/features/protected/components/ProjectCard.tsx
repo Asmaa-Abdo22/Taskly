@@ -1,9 +1,14 @@
+"use client";
 import { getAllProjects } from "../types/protected.types";
 import { formatDate } from "../utils/formatDate";
+import Link from "next/link";
 
 export default function ProjectCard({ project }: { project: getAllProjects }) {
   return (
-    <div className="bg-white rounded-lg p-6  ">
+    <Link
+      href={`/project/${project.id}/epics`}
+      className="bg-white rounded-lg p-6  "
+    >
       {/* Title */}
       <h2 className="text-title-md text-slate-900 leading-snug">
         {project.name}
@@ -27,6 +32,6 @@ export default function ProjectCard({ project }: { project: getAllProjects }) {
           {formatDate(project.created_at)}
         </span>
       </div>
-    </div>
+    </Link>
   );
 }

@@ -22,10 +22,12 @@ export default function ProtectedLayoutShell({
     isMobileMenuOpen,
     loading,
     pathname,
+    projectId,
     toggleMobileMenu,
     toggleSidebar,
     user,
   } = useProtectedLayout(initialUser);
+  
 
   return (
     <div className="flex flex-col min-h-screen bg-[#F9F9FF]">
@@ -35,6 +37,7 @@ export default function ProtectedLayoutShell({
           isCollapsed={isCollapsed}
           isLoggingOut={isLoggingOut}
           pathname={pathname}
+          projectId={projectId}
           toggleSidebar={toggleSidebar}
         />
         <MobileSidebar
@@ -43,6 +46,7 @@ export default function ProtectedLayoutShell({
           isLoggingOut={isLoggingOut}
           isMobileMenuOpen={isMobileMenuOpen}
           pathname={pathname}
+          projectId={projectId}
         />
         <main className="flex-1  p-4 md:p-6 pb-20 md:pb-6 overflow-auto">
           <ProtectedNavbar
@@ -54,8 +58,11 @@ export default function ProtectedLayoutShell({
           />
           {children}
         </main>
+
       </div>
-      {!isMobileMenuOpen && <MobileBottomNav pathname={pathname} />}
+      {!isMobileMenuOpen && (
+        <MobileBottomNav pathname={pathname} projectId={projectId} />
+      )}
     </div>
   );
 }

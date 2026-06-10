@@ -5,24 +5,28 @@ import Link from "next/link";
 import collapse from "@/src/icons/collapse.png";
 import icon from "@/src/icons/icon.png";
 import logout from "@/src/icons/logout.png";
-import { navItems } from "../../utils/navItems";
+import { getNavItems } from "../../utils/navItems";
 
 interface DesktopSidebarProps {
+  projectId?: string;
   handleLogout: () => void;
   isCollapsed: boolean;
   isLoggingOut: boolean;
-  pathname: string;
+  pathname?: string;
   toggleSidebar: () => void;
 }
 
 export const DesktopSidebar = ({
+  projectId,
   handleLogout,
   isCollapsed,
   isLoggingOut,
   pathname,
   toggleSidebar,
-}: DesktopSidebarProps) => (
-  <aside
+}: DesktopSidebarProps) => {
+  const items = getNavItems(projectId);
+return <>
+ <aside
     className={`hidden md:flex flex-col justify-between min-h-screen bg-[#C3C6D633] transition-all duration-300 ease-in-out ${
       isCollapsed ? "w-18" : "w-65"
     }`}
@@ -42,7 +46,7 @@ export const DesktopSidebar = ({
 
       <nav className="flex-1">
         <ul className="space-y-1 px-2">
-          {navItems.map((item) => {
+          {items.map((item) => {
             const isActive = pathname === item.path;
             return (
               <li key={item.name}>
@@ -106,4 +110,5 @@ export const DesktopSidebar = ({
       </button>
     </div>
   </aside>
-);
+</>
+}

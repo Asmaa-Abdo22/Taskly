@@ -15,11 +15,18 @@ const clearStoredAuthData = () => {
   });
 };
 
+const getProjectIdFromPathname = (pathname: string) => {
+  const match = pathname.match(/^\/project\/([^/]+)\/(epics|tasks|members|edit)$/);
+
+  return match?.[1];
+};
+
 export const useProtectedLayout = (initialUser: UserData) => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
   const pathname = usePathname();
+  const projectId = getProjectIdFromPathname(pathname);
   const router = useRouter();
   const dispatch = useAppDispatch();
   const user = useAppSelector((state) => state.auth.user) ?? initialUser;
@@ -73,6 +80,7 @@ export const useProtectedLayout = (initialUser: UserData) => {
     isMobileMenuOpen,
     loading: false,
     pathname,
+    projectId,
     toggleMobileMenu,
     toggleSidebar,
     user,

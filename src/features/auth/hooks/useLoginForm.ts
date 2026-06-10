@@ -35,10 +35,7 @@ export const useLoginForm = () => {
       }
 
       toast.success("Welcome to taskly");
-
-      setTimeout(() => {
-        router.replace("/project");
-      }, 2000);
+      router.replace("/project");
     } catch (error) {
       toast.error("Error occurred");
     } finally {

@@ -1,27 +1,28 @@
 "use client";
-
+import InputField from "@/src/components/InputField";
+import LoadingSpinner from "@/src/components/LoadingSpinner";
 import Link from "next/link";
+import TipIcon from "@/src/icons/tip.svg";
 import InviteIcon from "@/src/icons/invite.svg";
 import InitialzeProject from "@/src/icons/initialzeProject.svg";
-import TipIcon from "@/src/icons/tip.svg";
-
-import InputField from "@/src/components/InputField";
-import { useAddNewProject } from "../hooks/useAddNewProject";
-import LoadingSpinner from "@/src/components/LoadingSpinner";
-const AddNewProjectForm = () => {
+import { useEditProject } from "../hooks/useEditProject";
+import { useParams } from "next/navigation";
+const EditProject = () => {
+  const params = useParams();
+  const projectId = params.projectId as string;
   const {
     loading,
-    addNewProject,
-    handleSubmit,
     register,
     watch,
+    handleSubmit,
     formState: { errors },
-  } = useAddNewProject();
+    EditProject,
+  } = useEditProject(projectId);
   const descriptionLength = watch("description")?.length || 0;
 
   return (
     <>
-      <div className="addProject md:px-0 px-5 ">
+      <div className="EditProject md:px-0 px-5 ">
         <nav className="hidden md:block">
           <Link
             href="/project"
@@ -30,13 +31,20 @@ const AddNewProjectForm = () => {
             Projects
           </Link>
           <span className="text-slate-600 text-sm"> &gt; </span>
+          <Link
+            href={`/project/${projectId}/epics`}
+            className="text-slate-600 uppercase text-label-sm tracking-[1.2px]"
+          >
+            project title
+          </Link>
+          <span className="text-slate-600 text-sm"> &gt; </span>
           <span className=" text-label-sm  uppercase text-primaryy tracking-[1.2px]">
-            Add New Project
+            edit
           </span>
         </nav>
         <div className="title  flex justify-between md:items-center mt-2 mb-4 flex-col md:flex-row">
           <h1 className="hidden md:block text-slate-900 text-[36px] headlineLgWeight">
-            Add New Project
+            Edit Project
           </h1>
           <button className="md:flex gap-2 items-center btn btn-primaryy hidden">
             <InviteIcon width={24} height={24} className="mt-2" />
@@ -44,7 +52,7 @@ const AddNewProjectForm = () => {
           </button>
           <div className="md:hidden block">
             <h1 className=" text-slate-900 text-[24px] headlineLgWeight">
-              Initialize New Project
+              Edit Project
             </h1>
             <p className="text-slate-700 text-body-md ">
               Define the scope and foundational details of your project.
@@ -53,7 +61,7 @@ const AddNewProjectForm = () => {
         </div>
         {/* FORM */}
         <form
-          onSubmit={handleSubmit(addNewProject)}
+          onSubmit={handleSubmit((data) => EditProject(projectId, data))}
           className=" md:w-[75%] mx-auto md:bg-white rounded-sm py-3 md:mt-5 md:px-6"
         >
           {/* formTitle */}
@@ -69,7 +77,7 @@ const AddNewProjectForm = () => {
             {/* title */}
             <div>
               <h1 className=" text-slate-900 text-[24px] headlineLgWeight">
-                Initialize New Project
+                Edit Project
               </h1>
               <p className="text-slate-700 text-body-md ">
                 Define the scope and foundational details of your project.
@@ -84,7 +92,7 @@ const AddNewProjectForm = () => {
               <InputField
                 label="Project TITLE "
                 id="projectTitle"
-                placeholder="Pr"
+                placeholder="Project Title"
                 type="text"
                 {...register("name")}
                 error={errors.name?.message as string}
@@ -118,7 +126,8 @@ const AddNewProjectForm = () => {
           </div>
           {/* formButtons */}
           <div className="buttons mt-4 flex gap-2 justify-between md:flex-row flex-col">
-            <Link href="/project"
+            <Link
+              href="/project"
               type="button"
               className="text-body-md order-2 md:order-1 cursor-pointer text-slate-700 bg-transparent"
             >
@@ -128,7 +137,7 @@ const AddNewProjectForm = () => {
               type="submit"
               className="text-body-md btn btn-primaryy order-1 md:order-2"
             >
-              {loading ? <LoadingSpinner /> : " Create Project"}
+              {loading ? <LoadingSpinner /> : " Save Changes"}
             </button>
           </div>
         </form>
@@ -158,4 +167,4 @@ const AddNewProjectForm = () => {
   );
 };
 
-export default AddNewProjectForm;
+export default EditProject;

@@ -1,3 +1,8 @@
+import EditProject from "@/src/features/protected/components/EditProject";
 export default function ProjectDetailsPage() {
-  return <>details page</>;
+  return (
+    <>
+      <EditProject />
+    </>
+  );
 }

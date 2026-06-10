@@ -2,17 +2,28 @@
 import { getAllProjects } from "../types/protected.types";
 import { formatDate } from "../utils/formatDate";
 import Link from "next/link";
-
+import EditIcon from "@/src/icons/EditIcon.svg";
 export default function ProjectCard({ project }: { project: getAllProjects }) {
   return (
     <Link
       href={`/project/${project.id}/epics`}
-      className="bg-white rounded-lg p-6  "
+      className="bg-white rounded-lg p-3  "
     >
-      {/* Title */}
-      <h2 className="text-title-md text-slate-900 leading-snug">
-        {project.name}
-      </h2>
+      <div className="flex items-center justify-between">
+        {/* Title */}
+        <h2 className="text-title-md text-slate-900 leading-snug">
+          {project.name}
+        </h2>
+        <Link
+          href={`/project/${project.id}/edit`}
+          title="Edit"
+          className="text-warning"
+        >
+          {" "}
+          <EditIcon width={20} height={20} fill="currentColor" />
+        </Link>
+        {/* Efit Icon */}
+      </div>
 
       {/* Description */}
       <p className="mt-3 text-body-md text-slate-700 leading-relaxed">

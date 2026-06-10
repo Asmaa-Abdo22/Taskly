@@ -15,7 +15,7 @@ export const MobileBottomNav = ({
 }: MobileBottomNavProps) => {
   const items = getNavItems(projectId);
   return (
-    <nav className="fixed bottom-0 left-0 right-0 bg-background  md:hidden z-30">
+    <nav className="fixed bottom-0 left-0 right-0 bg-[#e2e4ed]  md:hidden z-30">
       <div className="flex justify-around items-center py-2 px-2">
         {items.map((item) => {
           const isActive = pathname === item.path;

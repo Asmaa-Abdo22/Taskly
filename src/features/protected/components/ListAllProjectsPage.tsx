@@ -20,17 +20,13 @@ const ListAllProjectsPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [limit] = useState(PROJECTS_PAGE_LIMIT);
   const [totalCount, setTotalCount] = useState(0);
-  const [error, setError] = useState("");
+  const [error, setError] = useState<Error | string>("");
   const [isMobile, setIsMobile] = useState<boolean | null>(null);
   const observerRef = useRef<HTMLDivElement | null>(null);
   const latestRequestRef = useRef(0);
   const isFetchingRef = useRef(false);
-  const {
-    loading,
-    paginationLoading,
-    infiniteScrollLoading,
-    getAllProjects,
-  } = useGetAllProjects();
+  const { loading, paginationLoading, infiniteScrollLoading, getAllProjects } =
+    useGetAllProjects();
 
   const totalPages = useMemo(
     () => Math.ceil(totalCount / limit),
@@ -80,17 +76,22 @@ const ListAllProjectsPage = () => {
 
         const result = res.result || [];
 
-        setTotalCount((prevTotalCount) =>
-          res.pagination.totalCount ||
-          (result.length < limit ? offset + result.length : offset + limit + 1) ||
-          prevTotalCount,
+        setTotalCount(
+          (prevTotalCount) =>
+            res.pagination.totalCount ||
+            (result.length < limit
+              ? offset + result.length
+              : offset + limit + 1) ||
+            prevTotalCount,
         );
         setCurrentPage(page);
         setProjects((prevProjects) =>
           loadingType === "infinite" ? [...prevProjects, ...result] : result,
         );
-      } catch {
-        setError("Failed to load projects");
+      } catch (err) {
+        if (err instanceof Error) {
+          setError(err);
+        }
       } finally {
         isFetchingRef.current = false;
       }
@@ -169,7 +170,9 @@ const ListAllProjectsPage = () => {
       />
     );
   }
-
+  if (error) {
+    throw error;
+  }
   return (
     <div className="allProjects">
       {/* TITLE */}
@@ -193,15 +196,11 @@ const ListAllProjectsPage = () => {
 
         <Link
           href="/project/add"
-          className="md:hidden fixed bottom-17.5 right-5 h-10 w-10 rounded-md btn-primaryy flex items-center justify-center"
+          className="md:hidden fixed bottom-18.75 right-5 h-10 w-10 rounded-md btn-primaryy flex items-center justify-center"
         >
           <PlusIcon width={27} height={27} className="mt-3.5 ml-3.5" />
         </Link>
       </div>
-
-      {error && (
-        <p className="my-5 text-body-md text-error">Failed to load projects</p>
-      )}
 
       {/* LIST */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 my-5">
@@ -237,7 +236,10 @@ const ListAllProjectsPage = () => {
       </div>
 
       {isMobile && projects.length > 0 && (
-        <div ref={observerRef} className="md:hidden grid grid-cols-1 gap-5 my-5">
+        <div
+          ref={observerRef}
+          className="md:hidden grid grid-cols-1 gap-5 my-5"
+        >
           {infiniteScrollLoading &&
             Array.from({ length: 2 }).map((_, index) => (
               <ProjectsSkeleton key={index} />

@@ -24,11 +24,8 @@ export default function Error({
           {error.message}
         </p>
 
-        <button
-          onClick={() => reset()}
-          className="flex items-center font-semibold text-[16px] btn btn-primaryy "
-        >
-          <span>Retry Connection</span>
+        <button onClick={() => reset()} className="flex items-center font-semibold text-[16px] btn btn-primaryy ">
+          <span >Retry Connection</span>
         </button>
       </div>
     </div>

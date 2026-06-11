@@ -39,7 +39,9 @@ export const useGetAllProjects = () => {
         }
 
         if (!response.ok) {
-          throw new Error("Failed to load projects");
+          throw new Error(
+            "  We're having trouble retrieving your projects right now. Please try again in a moment",
+          );
         }
 
         return { response, result, pagination };

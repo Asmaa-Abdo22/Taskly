@@ -34,3 +34,21 @@ export interface ProjectsPaginationMeta {
   startIndex: number | null;
   endIndex: number | null;
 }
+export type MemberRole = "owner" | "admin" | "member" | "viewer";
+
+export interface Member {
+  member_id: string;
+  project_id: string;
+  user_id: string;
+  role: MemberRole;
+  email: string;
+
+  metadata: {
+    name: string;
+    email: string;
+    job_title?: string;
+    email_verified?: boolean;
+    phone_verified?: boolean;
+    sub?: string;
+  };
+}

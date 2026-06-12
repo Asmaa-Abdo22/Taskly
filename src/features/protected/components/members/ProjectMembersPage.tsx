@@ -48,7 +48,7 @@ const ProjectMembersPage = () => {
           </Link>
           <span className="text-slate-600 text-sm"> &gt; </span>
           <Link
-            href={`/project/epics`}
+           href={`/project/${projectId}/edit`}
             className="text-slate-600 uppercase text-label-sm tracking-[1.2px]"
           >
             project name

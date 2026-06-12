@@ -6,13 +6,13 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import toast from "react-hot-toast";
 
 import { addNewProjectSchema } from "../schemas/addNewProjectSchema";
-import { addNewProjectData } from "../types/protected.types";
+import { addNewProjectData, addNewProjectForm } from "../types/protected.types";
 import { addNewProjectApi } from "../actions/addNewProject";
 
 export const useAddNewProject = () => {
   const [loading, setLoading] = useState(false);
 
-  const newProjectForm = useForm<addNewProjectData>({
+  const newProjectForm = useForm<addNewProjectForm>({
     resolver: zodResolver(addNewProjectSchema),
   });
 

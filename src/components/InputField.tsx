@@ -2,7 +2,9 @@
 import Image from "next/image";
 import noValidate from "@/src/icons/noValidate.png";
 import ErrorIcon from "@/src/icons/error.svg";
-interface InputFieldProps {
+import type { ComponentPropsWithoutRef } from "react";
+
+interface InputFieldProps extends ComponentPropsWithoutRef<"input"> {
   label: string;
   id: string;
   placeholder?: string;
@@ -17,7 +19,7 @@ export default function InputField({
   error,
   type = "text",
   ...rest
-}: any) {
+}: InputFieldProps) {
   return (
     <div className="w-full ">
       <label
@@ -44,7 +46,7 @@ export default function InputField({
 
       {error && error.includes(",") && (
         <p className="bg-surface-low text-error text-[11px] mt-2 flex flex-col gap-1 p-2 rounded">
-          {error.split(",").map((err: any, index: number) => (
+          {error.split(",").map((err, index) => (
             <span key={index} className="flex items-center gap-2">
               <Image src={noValidate} alt="" width={12} height={12} />
               {err.trim()}

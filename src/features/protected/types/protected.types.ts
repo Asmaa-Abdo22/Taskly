@@ -1,6 +1,7 @@
 import type { StaticImageData } from "next/image";
 import { addNewProjectSchema } from "../schemas/addNewProjectSchema";
 import type { z } from "zod";
+import { addNewEpicSchema } from "../schemas/addNewEpicSchema";
 
 export interface UserData {
   name: string;
@@ -51,4 +52,13 @@ export interface Member {
     phone_verified?: boolean;
     sub?: string;
   };
+}
+
+export type addNewEpicForm = z.infer<typeof addNewEpicSchema>;
+export interface addNewEpicData {
+  title: string;
+  description?: string;
+  assignee_id?: string;
+  project_id: string;
+  deadline?: string;
 }

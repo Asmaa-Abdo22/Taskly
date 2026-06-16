@@ -28,6 +28,7 @@ export interface getAllProjects {
 export interface ProjectsPaginationParams {
   limit: number;
   offset: number;
+  projectId?: string;
 }
 
 export interface ProjectsPaginationMeta {

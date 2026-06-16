@@ -11,9 +11,9 @@ import type {
   getAllProjects as ProjectType,
 } from "../types/protected.types";
 
-type ProjectsLoadingType = "initial" | "pagination" | "infinite";
+export type ProjectsLoadingType = "initial" | "pagination" | "infinite";
 
-const PROJECTS_PAGE_LIMIT = 5;
+export const PROJECTS_PAGE_LIMIT = 5;
 
 export const useGetAllProjects = () => {
   const [projects, setProjects] = useState<ProjectType[]>([]);
@@ -33,22 +33,14 @@ export const useGetAllProjects = () => {
 
   const limit = PROJECTS_PAGE_LIMIT;
 
-  const {
-    currentPage,
-    setCurrentPage,
-    totalPages,
-    pageNumbers,
-    hasNextPage,
-  } = usePagination({
-    totalCount,
-    limit,
-  });
+  const { currentPage, setCurrentPage, totalPages, pageNumbers, hasNextPage } =
+    usePagination({
+      totalCount,
+      limit,
+    });
 
   const fetchProjects = useCallback(
-    async (
-      page: number,
-      loadingType: ProjectsLoadingType = "initial",
-    ) => {
+    async (page: number, loadingType: ProjectsLoadingType = "initial") => {
       if (isFetchingRef.current) {
         return;
       }
@@ -80,8 +72,7 @@ export const useGetAllProjects = () => {
           offset,
         };
 
-        const { response, result, pagination } =
-          await getAllProjects(params);
+        const { response, result, pagination } = await getAllProjects(params);
 
         if (response.status === 401) {
           router.push("/login");

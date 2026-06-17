@@ -3,9 +3,15 @@ import { ListProjectEpics } from "../../types/protected.types";
 import { getAvatarInitials } from "../../utils/getAvatarInitials";
 import { formatDate } from "../../utils/formatDate";
 
-export default function MobileEpicCard({ epic }: { epic: ListProjectEpics }) {
+export default function MobileEpicCard({
+  epic,
+  onClick,
+}: {
+  epic: ListProjectEpics;
+  onClick: () => void;
+}) {
   return (
-    <div className="bg-white rounded-xl p-4 ">
+    <div onClick={onClick} className="bg-white rounded-xl p-4 ">
       {/* Header */}
       <div className="flex justify-between items-start mb-4">
         <span className="px-2 py-1 bg-surface-highest rounded  text-primaryy text-label-sm ">
@@ -42,7 +48,6 @@ export default function MobileEpicCard({ epic }: { epic: ListProjectEpics }) {
             Deadline
           </p>
           <p className="text-[12px] font-medium text-slate-900">
-           
             {formatDate(epic.deadline)}
           </p>
         </div>

@@ -9,9 +9,12 @@ import { useGetProjectEpics } from "../../hooks/useGetAllEpics";
 import EpicSkeleton from "./EpicSkeleton";
 import EpicEmpty from "./EpicEmpty";
 import Pagination from "../Pagination";
+import EpicDetailsModal from "./DisplayEpicDetailsPopup";
 
 const GetAllEpicsPage = () => {
   const {
+    selectedEpicId,
+    setSelectedEpicId,
     allEpics,
     error,
     loading,
@@ -99,13 +102,31 @@ const GetAllEpicsPage = () => {
 
       <div className="hidden md:grid md:grid-cols-2 gap-5 my-7">
         {allEpics.map((item) => (
-          <EpicCardDesktop key={item.id} epic={item} />
+          <EpicCardDesktop
+            key={item.id}
+            epic={item}
+            onClick={() => {
+              setSelectedEpicId(item.id);
+            }}
+          />
         ))}
       </div>
+      {selectedEpicId && (
+        <EpicDetailsModal
+          onClose={() => {
+            setSelectedEpicId(null);
+          }}
+          epicId={selectedEpicId}
+        />
+      )}
 
       <div className="md:hidden grid grid-cols-1 gap-5 my-7">
         {allEpics.map((item) => (
-          <MobileEpicCard key={item.id} epic={item} />
+          <MobileEpicCard
+            key={item.id}
+            epic={item}
+            onClick={() => setSelectedEpicId(item.id)}
+          />
         ))}
       </div>
 

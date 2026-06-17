@@ -5,9 +5,20 @@ import { ListProjectEpics } from "../../types/protected.types";
 import { getAvatarInitials } from "../../utils/getAvatarInitials";
 import { formatDate } from "../../utils/formatDate";
 
-export default function EpicCardDesktop({ epic }: { epic: ListProjectEpics }) {
+export default function EpicCardDesktop({
+  epic,
+  onClick,
+  
+}: {
+  epic: ListProjectEpics;
+  onClick: () => void;
+}) {
   return (
-    <div className="bg-white rounded-xl p-5 border-l-5 border-[#004E32] shadow-sm">
+    <div
+      onClick={onClick}
+      role="button"
+      className="cursor-pointer  rounded-xl p-5 border-l-5 border-[#004E32] shadow-sm"
+    >
       {/* Header */}
       <div className="flex items-start justify-between mb-6">
         <span className="px-3 py-1 rounded bg-green-300 text-green-800 text-label-sm font-semibold">

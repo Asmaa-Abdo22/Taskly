@@ -33,6 +33,7 @@ export const useGetProjectEpics = () => {
       totalCount,
       limit,
     });
+  const [selectedEpicId, setSelectedEpicId] = useState< null | string>(null);
 
   const getProjectEpics = useCallback(
     async (page: number, loadingType: ProjectsLoadingType = "initial") => {
@@ -87,7 +88,7 @@ export const useGetProjectEpics = () => {
 
         const projectsResult = result || [];
 
-       setTotalCount(pagination?.totalCount ?? 0);
+        setTotalCount(pagination?.totalCount ?? 0);
 
         setCurrentPage(page);
 
@@ -201,5 +202,7 @@ export const useGetProjectEpics = () => {
     hasNextPage,
     projectId,
     handlePageChange,
+    selectedEpicId,
+    setSelectedEpicId
   };
 };

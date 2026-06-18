@@ -85,8 +85,11 @@ export default function EpicDetailsModal({
                     leading-tight
                     font-bold
                     text-slate-900
+                    border
+                    border-transparent
+                    focus:border-[#d7e2ff]
                     disabled:cursor-not-allowed
-                    bg-surface-highest border-transparent rounded-md focus:outline-none transition-colors px-3 py-2
+                    rounded-md focus:outline-none transition-colors px-3 py-2
                   "
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
@@ -104,7 +107,10 @@ export default function EpicDetailsModal({
                     font-bold
                     text-slate-900
                      disabled:cursor-not-allowed
-                    bg-surface-highest border-transparent rounded-md focus:outline-none transition-colors px-3 py-2
+                     border-transparent
+                     border
+                    focus:border-[#d7e2ff]
+                    rounded-md focus:outline-none transition-colors px-3 py-2
                   "
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
@@ -145,7 +151,8 @@ export default function EpicDetailsModal({
               </p>
               {/* Description */}
               <textarea
-                className="text-slate-700 text-body-md bg-surface-highest border-transparent rounded-md focus:outline-none  transition-colors resize-none h-10 px-3 py-2"
+                className="text-slate-700 text-body-md border 
+                    focus:border-[#d7e2ff] border-transparent rounded-md focus:outline-none  transition-colors resize-none h-10 px-3 py-2"
                 value={description}
                 placeholder="No description provided"
                 onChange={(e) => setDescription(e.target.value)}
@@ -160,7 +167,8 @@ export default function EpicDetailsModal({
               onChange={(e) => setDescription(e.target.value)}
               onBlur={saveDescription}
               disabled={savingField === "description"}
-              className="hidden md:block font-normal text-[16px] text-blue-950/80 bg-surface-highest border-transparent rounded-md focus:outline-none  transition-colors resize-none h-10 px-3 py-2 "
+              className="hidden md:block font-normal text-[16px] text-blue-950/80 border 
+                    focus:border-[#d7e2ff]  border-transparent rounded-md focus:outline-none  transition-colors resize-none h-10 px-3 py-2 "
             />
 
             <div

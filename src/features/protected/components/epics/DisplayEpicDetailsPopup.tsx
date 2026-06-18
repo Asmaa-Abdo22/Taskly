@@ -9,6 +9,7 @@ import TasksIcon from "@/src/icons/epics/tasksIcon.svg";
 import { getAvatarInitials } from "../../utils/getAvatarInitials";
 import { useGetEpicDetails } from "../../hooks/useGetEpicDetails";
 import { formatDate2 } from "../../utils/formatDate";
+import Link from "next/link";
 
 export default function EpicDetailsModal({
   onClose,
@@ -33,6 +34,7 @@ export default function EpicDetailsModal({
     saveDescription,
     saveAssignee,
     saveDeadline,
+    projectId
   } = useGetEpicDetails(epicId);
 
   return (
@@ -395,7 +397,8 @@ export default function EpicDetailsModal({
                   No tasks have been added to this epic yet
                 </p>
 
-                <button
+                <Link
+                  href={`/project/${projectId}/tasks/new`}
                   className="
                     mt-5
                     btn
@@ -403,7 +406,7 @@ export default function EpicDetailsModal({
                   "
                 >
                   + Add Task
-                </button>
+                </Link>
               </div>
             </div>
           </div>

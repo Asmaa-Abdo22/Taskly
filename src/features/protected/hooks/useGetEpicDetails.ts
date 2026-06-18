@@ -218,5 +218,6 @@ export const useGetEpicDetails = (epicId: string) => {
     saveDescription,
     saveAssignee,
     saveDeadline,
+    projectId
   };
 };

@@ -32,12 +32,12 @@ export default function MobileEpicCard({
       <div className="flex items-center justify-between">
         <div className="flex gap-3 items-center">
           <div className="w-8 h-8 rounded-xl bg-primaryy text-white flex items-center justify-center text-[10px] font-bold">
-            {getAvatarInitials(epic.assignee.name)}
+            {getAvatarInitials(epic.assignee?.name || "")}
           </div>
 
           <div>
             <p className="text-slate-900 text-[12px] font-medium">
-              {epic.assignee.name}
+              {epic.assignee?.name || "Unassigned"}
             </p>
             <p className="text-xs text-slate-500">Assignee</p>
           </div>
@@ -48,7 +48,7 @@ export default function MobileEpicCard({
             Deadline
           </p>
           <p className="text-[12px] font-medium text-slate-900">
-            {formatDate(epic.deadline)}
+            {epic.deadline ? formatDate(epic.deadline) : "-"}
           </p>
         </div>
       </div>

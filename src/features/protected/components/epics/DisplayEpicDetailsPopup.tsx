@@ -9,7 +9,6 @@ import TasksIcon from "@/src/icons/epics/tasksIcon.svg";
 import { getAvatarInitials } from "../../utils/getAvatarInitials";
 import { useGetEpicDetails } from "../../hooks/useGetEpicDetails";
 import { formatDate2 } from "../../utils/formatDate";
-import LoadingSpinner from "@/src/components/LoadingSpinner";
 
 export default function EpicDetailsModal({
   onClose,
@@ -18,7 +17,23 @@ export default function EpicDetailsModal({
   onClose: () => void;
   epicId: string;
 }) {
-  const { loading, epic } = useGetEpicDetails(epicId);
+  const {
+    epic,
+    title,
+    description,
+    assigneeId,
+    deadline,
+    setTitle,
+    setDescription,
+    projectMembers,
+    isEditingAssignee,
+    setIsEditingAssignee,
+    savingField,
+    saveTitle,
+    saveDescription,
+    saveAssignee,
+    saveDeadline,
+  } = useGetEpicDetails(epicId);
 
   return (
     <div className="fixed inset-0 z-50" onClick={onClose}>
@@ -60,8 +75,8 @@ export default function EpicDetailsModal({
                     {epic?.epic_id}
                   </span>
                 </div>
-
-                <h2
+                {/* TITLE */}
+                <input
                   className="
                     hidden
                     md:block
@@ -70,12 +85,16 @@ export default function EpicDetailsModal({
                     leading-tight
                     font-bold
                     text-slate-900
+                    disabled:cursor-not-allowed
+                    bg-surface-highest border-transparent rounded-md focus:outline-none transition-colors px-3 py-2
                   "
-                >
-                  {loading ? <LoadingSpinner/> : epic?.title}
-                </h2>
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
+                  onBlur={saveTitle}
+                  disabled={savingField === "title"}
+                />
 
-                <h2
+                <input
                   className="
                     md:hidden
                     block
@@ -84,10 +103,14 @@ export default function EpicDetailsModal({
                     leading-tight
                     font-bold
                     text-slate-900
+                     disabled:cursor-not-allowed
+                    bg-surface-highest border-transparent rounded-md focus:outline-none transition-colors px-3 py-2
                   "
-                >
-                  {loading ? <LoadingSpinner/> : epic?.title}
-                </h2>
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
+                  onBlur={saveTitle}
+                  disabled={savingField === "title"}
+                />
               </div>
 
               <button
@@ -120,15 +143,25 @@ export default function EpicDetailsModal({
               >
                 Description
               </p>
-
-              <p className="text-slate-700 text-body-md">
-                {epic?.description || "No description provided"}
-              </p>
+              {/* Description */}
+              <textarea
+                className="text-slate-700 text-body-md bg-surface-highest border-transparent rounded-md focus:outline-none  transition-colors resize-none h-10 px-3 py-2"
+                value={description}
+                placeholder="No description provided"
+                onChange={(e) => setDescription(e.target.value)}
+                onBlur={saveDescription}
+                disabled={savingField === "description"}
+              />
             </div>
 
-            <p className="hidden md:block font-normal text-[16px] text-blue-950/80">
-              {epic?.description || "No description provided"}
-            </p>
+            <textarea
+              value={description}
+              placeholder="No description provided"
+              onChange={(e) => setDescription(e.target.value)}
+              onBlur={saveDescription}
+              disabled={savingField === "description"}
+              className="hidden md:block font-normal text-[16px] text-blue-950/80 bg-surface-highest border-transparent rounded-md focus:outline-none  transition-colors resize-none h-10 px-3 py-2 "
+            />
 
             <div
               className="
@@ -169,14 +202,34 @@ export default function EpicDetailsModal({
                   </span>
                 </div>
               </div>
-
+              {/* Assignee */}
               <div>
                 <p className="mb-2 text-[11px] font-bold uppercase tracking-wide text-slate-500 md:text-slate-400">
                   Assignee
                 </p>
 
-                <div className="flex items-center gap-2">
-                  {epic?.assignee ? (
+                <div
+                  className="flex items-center gap-2 "
+                  onClick={() => setIsEditingAssignee(true)}
+                >
+                  {isEditingAssignee ? (
+                    <select
+                      className="text-body-md text-slate-900 disabled:cursor-not-allowed bg-red-400"
+                      value={assigneeId || ""}
+                      onChange={(e) =>
+                        saveAssignee(e.target.value ? e.target.value : null)
+                      }
+                      disabled={savingField === "assignee_id"}
+                      autoFocus
+                    >
+                      <option value="">Unassigned</option>
+                      {projectMembers.map((member) => (
+                        <option key={member.user_id} value={member.user_id}>
+                          {member.metadata.name}
+                        </option>
+                      ))}
+                    </select>
+                  ) : epic?.assignee ? (
                     <>
                       <div
                         className="
@@ -232,13 +285,19 @@ export default function EpicDetailsModal({
                 <p className="mb-2 text-[11px] font-bold uppercase tracking-wide text-slate-500 md:text-slate-400">
                   Deadline
                 </p>
-
+                {/* Deadline */}
                 <div className="flex items-center gap-1">
-                  <DateIcon width={16} height={16} className="mt-1" />
+                  {/* <DateIcon width={16} height={16} className="mt-1" /> */}
 
-                  <span className="text-body-md text-slate-900">
-                    {epic?.deadline ? formatDate2(epic.deadline) : "-"}
-                  </span>
+                  <input
+                    type="date"
+                    className="text-body-md text-slate-900 disabled:cursor-not-allowed"
+                    value={deadline}
+                    onChange={(e) => {
+                      saveDeadline(e.target.value);
+                    }}
+                    disabled={savingField === "deadline"}
+                  />
                 </div>
               </div>
 
@@ -271,7 +330,7 @@ export default function EpicDetailsModal({
                   text-slate-700
                 "
               >
-                 Tasks
+                Tasks
               </h3>
 
               <div

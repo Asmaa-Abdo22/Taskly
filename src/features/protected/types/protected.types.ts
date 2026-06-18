@@ -64,12 +64,19 @@ export interface addNewEpicData {
   deadline?: string;
 }
 
+export interface UpdateEpicData {
+  title?: string;
+  description?: string;
+  assignee_id?: string | null;
+  deadline?: string | null;
+}
+
 export interface ListProjectEpics {
   id: string;
   epic_id: string;
   title: string;
-  description?: string;
-  deadline: string;
+  description?: string | null;
+  deadline: string | null;
   created_at: string;
 
   created_by: {
@@ -84,5 +91,5 @@ export interface ListProjectEpics {
     name: string;
     email: string;
     department: string;
-  };
+  } | null;
 }

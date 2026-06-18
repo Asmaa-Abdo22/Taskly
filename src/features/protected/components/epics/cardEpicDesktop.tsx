@@ -38,13 +38,13 @@ export default function EpicCardDesktop({
       {/* Assignee */}
       <div className="flex items-center gap-3 mb-6">
         <div className="w-10 h-10 rounded-xl bg-green-400 flex items-center justify-center font-bold text-slate-900 text-[14px]">
-          {getAvatarInitials(epic.assignee.name)}
+          {getAvatarInitials(epic.assignee?.name || "")}
         </div>
 
         <div>
           <p className=" text-slate-600 font-medium text-[12px]">Assignee</p>
           <p className="text-[14px] font-semibold text-slate-900">
-            {epic.assignee.name}
+            {epic.assignee?.name || "Unassigned"}
           </p>
         </div>
       </div>

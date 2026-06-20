@@ -195,7 +195,7 @@ const AddNewTaskPage = () => {
                 Select Epic Link
               </option>
               {allEpics.map((item) => (
-                <option key={item.epic_id} value={item.epic_id}>
+                <option key={item.id} value={item.id}>
                   {item.epic_id} -{" "}
                   {item.title.length > 100
                     ? `${item.title.slice(0, 100)}...`

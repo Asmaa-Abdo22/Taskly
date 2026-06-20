@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 export const addNewTaskSchema = z.object({
-  project_id: z.string(),
+  project_id: z.string().optional(),
   epic_id: z.string().max(100, "Max length 100").optional(),
   title: z.string().min(1, "Title is required"),
   description: z.string().optional(),

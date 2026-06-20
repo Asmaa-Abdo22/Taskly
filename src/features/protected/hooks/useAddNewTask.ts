@@ -77,10 +77,14 @@ export const useAddNewTask = () => {
     "DONE",
   ];
   useEffect(() => {
-    if (epicIdParam && getValues("epic_id") !== epicIdParam) {
-      setValue("epic_id", epicIdParam);
+    if (!epicIdParam || !allEpics.length) return;
+
+    const epic = allEpics.find((item) => item.epic_id === epicIdParam);
+
+    if (epic) {
+      setValue("epic_id", epic.id);
     }
-  }, [epicIdParam, getValues, setValue]);
+  }, [epicIdParam, allEpics, setValue]);
 
   return {
     addNewTask,

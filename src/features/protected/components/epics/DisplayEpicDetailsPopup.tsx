@@ -36,7 +36,7 @@ export default function EpicDetailsModal({
     saveDeadline,
     projectId,
   } = useGetEpicDetails(epicId);
-  const epicIdParam = epic?.epic_id;
+  const epicIdParam = epic?.id;
   return (
     <div className="fixed inset-0 z-50" onClick={onClose}>
       <div className="absolute inset-0 bg-black/50 backdrop-blur-[3px]" />

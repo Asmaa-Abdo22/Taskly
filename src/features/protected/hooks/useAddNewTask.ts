@@ -76,15 +76,6 @@ export const useAddNewTask = () => {
     "READY_FOR_PRODUCTION",
     "DONE",
   ];
-  useEffect(() => {
-    if (!epicIdParam || !allEpics.length) return;
-
-    const epic = allEpics.find((item) => item.epic_id === epicIdParam);
-
-    if (epic) {
-      setValue("epic_id", epic.id);
-    }
-  }, [epicIdParam, allEpics, setValue]);
 
   return {
     addNewTask,

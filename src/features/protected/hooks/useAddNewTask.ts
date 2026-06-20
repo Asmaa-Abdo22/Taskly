@@ -14,12 +14,16 @@ import { useGetProjectMembers } from "./useGetProjectMembers";
 export const useAddNewTask = () => {
   const [loading, setLoading] = useState(false);
   const [projectMembers, setProjectMembers] = useState<Member[]>([]);
+  // get epic id from search params
+  const epicIdParam = useSearchParams().get("epicId");
   const newTaskForm = useForm<AddNewTaskForm>({
     resolver: zodResolver(addNewTaskSchema),
     defaultValues: {
       status: "TO_DO",
+      epic_id: epicIdParam || "",
     },
   });
+  const { getValues, setValue } = newTaskForm;
   const params = useParams();
   const projectId = params.projectId as string;
   const router = useRouter();
@@ -35,8 +39,6 @@ export const useAddNewTask = () => {
     };
     loadMembers();
   }, [projectId]);
-  // get epic id from search params
-  const epicIdParam = useSearchParams().get("epicId");
   const addNewTask = async (data: AddNewTaskForm) => {
     try {
       setLoading(true);
@@ -74,12 +76,11 @@ export const useAddNewTask = () => {
     "READY_FOR_PRODUCTION",
     "DONE",
   ];
-  // Apply Auto Select Epi
   useEffect(() => {
-    if (epicIdParam) {
-      newTaskForm.setValue("epic_id", epicIdParam);
+    if (epicIdParam && getValues("epic_id") !== epicIdParam) {
+      setValue("epic_id", epicIdParam);
     }
-  }, [epicIdParam]);
+  }, [epicIdParam, getValues, setValue]);
 
   return {
     addNewTask,

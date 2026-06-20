@@ -16,11 +16,11 @@ const AddNewTaskPage = () => {
     watch,
     allEpics,
     projectMembers,
-    epicIdParam,
     taskStatuses,
   } = useAddNewTask();
 
   const descriptionLength = watch("description")?.length || 0;
+  const epicId = watch("epic_id") || "";
   return (
     <>
       <div className="addTask md:px-0 px-5 ">
@@ -178,6 +178,7 @@ const AddNewTaskPage = () => {
             <select
               {...register("epic_id")}
               id="epic"
+              value={epicId}
               className="
           w-full
           h-11

@@ -34,9 +34,9 @@ export default function EpicDetailsModal({
     saveDescription,
     saveAssignee,
     saveDeadline,
-    projectId
+    projectId,
   } = useGetEpicDetails(epicId);
-
+  const epicIdParam = epic?.epic_id;
   return (
     <div className="fixed inset-0 z-50" onClick={onClose}>
       <div className="absolute inset-0 bg-black/50 backdrop-blur-[3px]" />
@@ -398,7 +398,7 @@ export default function EpicDetailsModal({
                 </p>
 
                 <Link
-                  href={`/project/${projectId}/tasks/new`}
+                  href={`/project/${projectId}/tasks/new?epicId=${epicIdParam}`}
                   className="
                     mt-5
                     btn

@@ -1,9 +1,11 @@
-import React from 'react'
+import AddNewTaskPage from "@/src/features/protected/components/tasks/AddNewTaskPage";
 
 const page = () => {
   return (
-    <div>new task pageeee</div>
-  )
-}
+    <>
+      <AddNewTaskPage />
+    </>
+  );
+};
 
-export default page
+export default page;

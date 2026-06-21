@@ -1,7 +1,6 @@
 "use client";
 import { useState } from "react";
-import { getEpicsApi } from "../actions/getProjectEpics";
-import type { ListProjectEpics, Task } from "../types/protected.types";
+import type {  Task } from "../types/protected.types";
 
 import { getAllTasksApi } from "../actions/getAllTasks";
 export const useGetAllTasks = (epicId: string) => {
@@ -18,10 +17,9 @@ export const useGetAllTasks = (epicId: string) => {
         throw new Error("Failed to load tasks");
       }
       setAllTasks(result);
-      console.log("all tasks", result);
     } catch (err) {
       if (err instanceof Error) {
-        settasksError(err);
+        settasksError(new Error("Failed to load tasks"));
       }
     } finally {
       setTasksLoading(false);

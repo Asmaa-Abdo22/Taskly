@@ -52,10 +52,10 @@ return <>
               <li key={item.name}>
                 <Link
                   href={item.path}
-                  className={`flex  items-center gap-1 px-3 py-1 rounded-md transition-colors ${
+                  className={`flex  items-center gap-1 px-3 py-1 rounded-md transition-colors  ${
                     isActive
-                      ? "bg-background text-primaryy"
-                      : "text-slate-700 hover:bg-background hover:text-primaryy"
+                      ? "bg-white text-primaryy"
+                      : "text-slate-700 hover:bg-white hover:text-blue-800"
                   } ${isCollapsed ? "justify-center" : ""}`}
                 >
                   <div className="w-10 h-10 rounded-xs    flex items-center justify-center">

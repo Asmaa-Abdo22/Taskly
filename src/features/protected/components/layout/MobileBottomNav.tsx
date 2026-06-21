@@ -30,7 +30,7 @@ export const MobileBottomNav = ({
               key={item.name}
               href={item.path}
               className={`flex flex-col items-center gap-1 py-1 px-2 rounded-md transition-colors ${
-                isActive ? "text-primaryy" : "text-slate-700"
+                isActive ? "text-blue-800 bg-white " : " hover:bg-white hover:text-blue-800 transition-colors"
               }`}
             >
               <div className="w-6 h-6 flex items-center justify-center">

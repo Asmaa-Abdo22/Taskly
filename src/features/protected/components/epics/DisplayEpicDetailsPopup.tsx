@@ -10,6 +10,10 @@ import { getAvatarInitials } from "../../utils/getAvatarInitials";
 import { useGetEpicDetails } from "../../hooks/useGetEpicDetails";
 import { formatDate2 } from "../../utils/formatDate";
 import Link from "next/link";
+import TaskListItem from "../tasks/TaskListItem";
+import LoadingSpinner from "@/src/components/LoadingSpinner";
+import ProjectsSkeleton from "../ProjectsSkeleton";
+import TasksSkeleton from "../tasks/TasksSkeleton";
 
 export default function EpicDetailsModal({
   onClose,
@@ -35,8 +39,15 @@ export default function EpicDetailsModal({
     saveAssignee,
     saveDeadline,
     projectId,
+    allTasks,
+    tasksError,
+    tasksLoading,
   } = useGetEpicDetails(epicId);
   const epicIdParam = epic?.id;
+
+  if (tasksError) {
+    throw tasksError;
+  }
   return (
     <div className="fixed inset-0 z-50" onClick={onClose}>
       <div className="absolute inset-0 bg-black/50 backdrop-blur-[3px]" />
@@ -328,7 +339,7 @@ export default function EpicDetailsModal({
 
             <div className="my-6 border-t border-slate-200" />
 
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between mb-4">
               <h3
                 className="
                   text-[11px]
@@ -351,64 +362,55 @@ export default function EpicDetailsModal({
                   py-1
                   text-[11px]
                   font-semibold
-                  text-slate-600
+                  text-slate-600 block md:hidden
                 "
               >
-                0 TASKS
+                {allTasks?.length || 0} {allTasks?.length===1? "TASK":"TASKS"}
               </div>
+              <Link
+                href={`/project/${projectId}/tasks/new?epicId=${epicIdParam}`}
+                className="
+        cursor-pointer
+        md:block hidden
+                    text-center
+                    py-3
+                    rounded-md
+                    font-semibold
+                    text-[14px]
+                    text-primaryy
+                  
+                  "
+              >
+                + Add Task
+              </Link>
             </div>
 
-            <div
-              className="
-                mt-4
-                rounded-2xl
-                border
-                border-dashed
-                border-slate-300
-                bg-surface-low
-                p-8
-                md:p-12
-              "
-            >
-              <div className="flex flex-col items-center text-center">
-                <div
-                  className="
-                    h-14
-                    w-14
-                    rounded-2xl
-                    bg-blue-100
-                    flex
-                    items-center
-                    justify-center
-                    mb-5
-                  "
-                >
-                  <TasksIcon width={18} height={18} />
+            {tasksLoading ? (
+              <TasksSkeleton />
+            ) : allTasks && allTasks.length > 0 ? (
+              allTasks?.map((item) => (
+                <TaskListItem key={item.id} task={item} />
+              ))
+            ) : (
+              <div className="mt-4 rounded-2xl border border-dashed border-slate-300 bg-surface-low p-8 md:p-12">
+                <div className="flex flex-col items-center text-center">
+                  <div className="h-14 w-14 rounded-2xl bg-blue-100 flex items-center justify-center mb-5">
+                    <TasksIcon width={18} height={18} />
+                  </div>
+
+                  <p className="text-sm md:text-base leading-6 text-slate-700">
+                    No tasks found for this epic
+                  </p>
+
+                  <Link
+                    href={`/project/${projectId}/tasks/new?epicId=${epicIdParam}`}
+                    className="mt-5 btn btn-primaryy"
+                  >
+                    + Add Task
+                  </Link>
                 </div>
-
-                <p
-                  className="
-                    text-sm
-                    md:text-base
-                    leading-6
-                    text-slate-700
-                  "
-                >
-                  No tasks have been added to this epic yet
-                </p>
-
-                <Link
-                  href={`/project/${projectId}/tasks/new?epicId=${epicIdParam}`}
-                  className="
-                    mt-5
-                    btn
-                    btn-primaryy
-                  "
-                >
-                  + Add Task
-                </Link>
               </div>
-            </div>
+            )}
           </div>
         </div>
       </div>

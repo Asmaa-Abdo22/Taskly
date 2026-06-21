@@ -1,0 +1,33 @@
+"use server";
+
+import { getAuthTokens } from "../../auth/utils/sessionCookies";
+
+export const getAllTasksApi = async (epicId: string) => {
+  const { accessToken } = await getAuthTokens();
+
+  if (!accessToken) {
+    return {
+      response: { ok: false, status: 401 },
+      result: { message: "Unauthorized" },
+    };
+  }
+
+  const response = await fetch(
+    `${process.env.SUPABASE_URL}/rest/v1/project_tasks?epic_id=eq.${epicId}`,
+    {
+      method: "GET",
+      headers: {
+        apikey: process.env.SUPABASE_PUBLISHABLE_KEY!,
+        Authorization: `Bearer ${accessToken}`,
+        "Content-Type": "application/json",
+      },
+    },
+  );
+
+  const result = await response.json();
+
+  return {
+    response: { ok: response.ok, status: response.status },
+    result,
+  };
+};

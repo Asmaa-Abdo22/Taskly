@@ -10,6 +10,7 @@ import {
   UpdateEpicData,
 } from "../types/protected.types";
 import { useGetProjectMembers } from "./useGetProjectMembers";
+import { useGetAllTasks } from "./useGetAllTasks";
 
 type EpicField = "title" | "description" | "assignee_id" | "deadline";
 
@@ -43,6 +44,10 @@ export const useGetEpicDetails = (epicId: string) => {
   };
   useEffect(() => {
     getEpicDetails();
+  }, [epicId]);
+  const { getAllTasks,allTasks,tasksError,tasksLoading } = useGetAllTasks(epicId);
+  useEffect(() => {
+    getAllTasks();
   }, [epicId]);
 
   // *Update Epic
@@ -116,6 +121,7 @@ export const useGetEpicDetails = (epicId: string) => {
         return { ...currentEpic, ...data };
       });
       toast.success("Epic updated successfully");
+      getAllTasks()
       return true;
     } catch {
       getOldValues();
@@ -218,6 +224,7 @@ export const useGetEpicDetails = (epicId: string) => {
     saveDescription,
     saveAssignee,
     saveDeadline,
-    projectId
+    projectId,
+    allTasks,tasksError,tasksLoading
   };
 };

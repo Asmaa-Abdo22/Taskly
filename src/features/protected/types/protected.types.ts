@@ -93,3 +93,35 @@ export interface ListProjectEpics {
     department: string;
   } | null;
 }
+
+export interface Task {
+  id: string;
+  task_id: string;
+  project_id: string;
+  epic_id: string;
+  title: string;
+  description: string;
+  status: string;
+  due_date: string;
+  created_at: string;
+
+  assignee: {
+    id: string;
+    name: string;
+    email: string;
+    department: string | null;
+  } | null;
+
+  created_by: {
+    id: string;
+    name: string;
+    email: string;
+    department: string | null;
+  };
+
+  epic: {
+    id: string;
+    epic_id: string;
+    title: string;
+  };
+}

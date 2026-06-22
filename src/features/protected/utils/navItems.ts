@@ -21,12 +21,12 @@ export const getNavItems = (projectId?: string): NavItem[] => {
   return [
     ...items,
     {
-      name: "Epics",
+      name: "Project Epics",
       icon: epic,
       path: `/project/${projectId}/epics`,
     },
     {
-      name: "Tasks",
+      name: "Project Tasks",
       icon: tasks,
       path: `/project/${projectId}/tasks`,
     },

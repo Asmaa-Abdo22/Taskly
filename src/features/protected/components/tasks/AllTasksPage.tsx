@@ -1,0 +1,138 @@
+"use client";
+import Link from "next/link";
+import { useParams } from "next/navigation";
+import SearchIcon from "@/src/icons/search.svg";
+import Dashboard from "@/src/icons/dashboard.svg";
+import List from "@/src/icons/list.svg";
+import ViewIcon from "@/src/icons/view.png";
+import Image from "next/image";
+import ToDoCard from "@/src/features/protected/components/tasks/ToDoCard";
+export default function AllTasksPage() {
+  const params = useParams();
+  const projectId = params.projectId as string;
+  return (
+    <>
+      <div className="allTasks md:px-0 px-5">
+        {/* HEADER */}
+        <nav className="hidden md:block">
+          <Link
+            href="/project"
+            className="text-slate-600 uppercase text-label-sm tracking-[1.2px]"
+          >
+            Projects
+          </Link>
+          <span className="text-slate-600 text-sm"> &gt; </span>
+          <Link
+            href={`/project/${projectId}/edit`}
+            className="text-slate-600 uppercase text-label-sm tracking-[1.2px]"
+          >
+            project alpha
+          </Link>
+          <span className="text-slate-600 text-sm"> &gt; </span>
+          <span className="text-label-sm  uppercase text-primaryy tracking-[1.2px]">
+            Tasks
+          </span>
+        </nav>
+        <div className="title flex md:items-center justify-between mt-2 mb-4 flex-col md:flex-row">
+          <div className="  flex  items-start mt-2 mb-4 flex-col ">
+            <h1 className=" text-slate-900 text-[36px] headlineLgWeight">
+              Active Workboard
+            </h1>
+            <p className="text-body-md md:text-[16px] text-slate-700 leading-relaxed">
+              Curating Project Alpha's production pipeline and milestones.
+            </p>
+          </div>
+
+          <div className="flex gap-4 items-center flex-1">
+            <div className="text-center md:text-end flex-1 h-full">
+              <div className="flex items-center relative justify-end">
+                <SearchIcon
+                  width={30}
+                  height={30}
+                  className="absolute md:left-80 left-2 top-1/2 mt-2.5 md:mt-2.8 -translate-y-1/2"
+                />
+
+                <input
+                  id="searchEpics"
+                  type="text"
+                  placeholder="Search Epics..."
+                  className="w-full md:w-1/2 md:pl-6 pl-6 placeholder:text-[#737685] px-3 py-4 text-body-md text-slate-900 bg-surface-highest border-transparent rounded-md focus:outline-none transition-colors"
+                />
+              </div>
+            </div>
+            {/* view selcet */}
+            <select
+              name=""
+              id="selectView"
+              className="bg-white h-full hidden md:block cursor-pointer py-3 rounded-md px-4 text-[14px] text-slate-900"
+            >
+              <option value="">
+                {" "}
+                {/* <Dashboard width={30} height={30} className="" /> */}
+                 Board View
+              </option>
+              <option value="">
+                {/* <List width={30} height={30} className="" /> */}
+                List View
+              </option>
+            </select>
+
+            {/* icons */}
+            <div className=" justify-center items-center bg-surface-highest rounded-md hidden md:flex py-2 px-3 cursor-pointer">
+              <Image src={ViewIcon} alt="view" width={20} height={20} />
+            </div>
+          </div>
+        </div>
+
+        {/* BODY */}
+        <div className="hidden md:grid grid-flow-col auto-cols-[280px] gap-3 overflow-x-auto">
+          <div className="toDo flex flex-col gap-3  p-1">
+            {/* title */}
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2 ">
+                <div className="circle bg-slate-300 rounded-full h-2 w-2"></div>
+                <p className="uppercase text-slate-700 font-bold text-[11px] ">
+                  to do
+                </p>
+                <div className="number bg-surface-highest flex items-center justify-center py-1  px-2 rounded-md font-bold text-[10px]">
+                  <span>2</span>
+                </div>
+              </div>
+              <Link
+                href={`/project/${projectId}/tasks/new`}
+                className="cursor-pointer text-[20px] text-slate-400"
+              >
+                {" "}
+                +
+              </Link>
+            </div>
+            {/* add task */}
+            <Link
+              href={`/project/${projectId}/tasks/new`}
+              className="
+        cursor-pointer
+                    border
+                   border-dashed
+                   border-slate-300
+                    text-center
+                    py-3
+                    rounded-md
+                    font-bold
+                    text-[12px]
+                    text-slate-600
+                    uppercase
+                   tracking-widest
+              
+                   w-full 
+                  "
+            >
+              + Add New Task
+            </Link>
+            {/* all todo  tasks */}
+            <ToDoCard />
+          </div>
+        </div>
+      </div>
+    </>
+  );
+}

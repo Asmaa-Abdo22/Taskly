@@ -28,7 +28,7 @@ export const getNavItems = (projectId?: string): NavItem[] => {
     {
       name: "Project Tasks",
       icon: tasks,
-      path: `/project/${projectId}/tasks`,
+      path: `/project/${projectId}/tasks?view=board`,
     },
     {
       name: "Project Members",

@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useEffect } from "react";
-import { useGeTasksView } from "../../hooks/useGetTasksView";
+import { useGetTasksView } from "../../hooks/useGetTasksView";
 import type { Task } from "../../types/protected.types";
 import { getAvatarInitials } from "../../utils/getAvatarInitials";
 import TodoCardSkeleton from "./statusColSkeleton";
@@ -24,7 +24,7 @@ export default function StatusColumn({
   countBg,
 }: Props) {
   const { getTasksView, allTasksView, tasksViewLoading, tasksViewError } =
-    useGeTasksView();
+    useGetTasksView();
 
   useEffect(() => {
     getTasksView(status);

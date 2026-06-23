@@ -1,17 +1,15 @@
 "use client";
 import Link from "next/link";
 import SearchIcon from "@/src/icons/search.svg";
-import Dashboard from "@/src/icons/dashboard.svg";
-import List from "@/src/icons/list.svg";
 import ViewIcon from "@/src/icons/view.png";
 import Image from "next/image";
 import BoardView from "./BoardView";
-import { useGeTasksView } from "../../hooks/useGetTasksView";
+import { useGetTasksView } from "../../hooks/useGetTasksView";
 import { useRouter, useSearchParams } from "next/navigation";
 import ListView from "./ListView";
 export default function AllTasksPage() {
   const viewType = useSearchParams().get("view") as string;
-  const { projectId, allTasksView } = useGeTasksView();
+  const { projectId } = useGetTasksView();
   const router = useRouter();
   const changeTypeInSelcet = (e: React.ChangeEvent<HTMLSelectElement>) => {
     router.push(`/project/${projectId}/tasks?view=${e.target.value}`);

@@ -1,10 +1,12 @@
 import PlusIcon from "@/src/icons/plus.svg";
 import Link from "next/link";
-export default function ListViewDesktop() {
-  const STATUSES = [
+import { Task } from "../../types/protected.types";
+import { formatDate } from "../../utils/formatDate";
+import { getAvatarInitials } from "../../utils/getAvatarInitials";
+export const STATUSES = [
     {
       status: "TO_DO",
-      bgColor: "bg-slate-300",
+      bgColor: "bg-slate-200",
       statusText: "text-slate-800",
     },
     {
@@ -39,22 +41,30 @@ export default function ListViewDesktop() {
     },
     {
       status: "DONE",
-      bgColor: "bg-green-500",
+      bgColor: "bg-green-400",
       statusText: "text-slate-800",
     },
   ];
+export default function ListViewDesktop({
+  allTasks,
+  projectId,
+}: {
+  allTasks: Task[];
+  projectId: string;
+}) {
+  
 
   return (
     <>
-      <div className="overflow-hidden rounded-2xl  bg-white">
+      <div className="overflow-hidden rounded-2xl bg-white">
         {/* Header */}
-        <div className="grid grid-cols-[120px_1fr_180px_150px_120px_50px] border-b border-slate-200 px-6 py-4">
+        <div className="grid grid-cols-[120px_1fr_180px_150px_150px_50px] border-b border-slate-200 px-6 py-4">
           <span className="text-label-sm uppercase tracking-wide text-slate-600">
             Task ID
           </span>
 
           <span className="text-label-sm uppercase tracking-wide text-slate-600">
-            title
+            Title
           </span>
 
           <span className="text-label-sm uppercase tracking-wide text-slate-600">
@@ -72,39 +82,58 @@ export default function ListViewDesktop() {
           <span />
         </div>
 
-        {/* Row */}
-        <div className="grid grid-cols-[120px_1fr_180px_150px_120px_50px] items-center px-6 py-5 hover:bg-slate-50 transition-colors">
-          <span className="font-normal text-primaryy text-body-md">
-            TASK-125
-          </span>
+        {allTasks.map((item) => {
+          const currentStatus = STATUSES.find(
+            (status) => status.status === item.status
+          );
 
-          <div>
-            <h3 className=" text-slate-900 font-medium text-body-md">
-              Develop responsive bento grid components
-            </h3>
-          </div>
+          return (
+            <div
+              key={item.id}
+              className="grid grid-cols-[120px_1fr_180px_150px_150px_50px] items-center px-6 py-5 hover:bg-slate-50 transition-colors"
+            >
+              <span className="font-normal text-primaryy text-body-md">
+                {item.task_id}
+              </span>
 
-          <div>
-            <span className="rounded-md bg-surface-highest px-3 py-1 text-xs font-bold text-slate-800 ">
-              In Progress
-            </span>
-          </div>
+              <div>
+                <h3 className="text-slate-900 font-medium text-sm">
+                  {item.title}
+                </h3>
+              </div>
 
-          <span className="text-slate-700 font-normal text-body-md">
-            Oct 25, 2025
-          </span>
+              <div>
+                <span
+                  className={`rounded-md px-3 py-1 text-xs font-bold ${currentStatus?.bgColor} ${currentStatus?.statusText}`}
+                >
+                  {item.status.replaceAll("_"," ")}
+                </span>
+              </div>
 
-          <div className="flex items-center">
-            <div className="flex h-9 w-9 items-center justify-center rounded-full bg-surface-highest text-xs font-semibold text-slate-900">
-              AA
+              <span className="text-slate-700 font-normal text-body-md">
+                {formatDate(item.due_date)}
+              </span>
+
+              <div className="flex items-center gap-2">
+                <div className="flex h-7 w-7 items-center justify-center rounded-full bg-surface-highest text-xs font-semibold text-slate-900">
+                  {getAvatarInitials(item?.assignee?.name ?? "AA")}
+                </div>
+
+                <span className="text-slate-900 text-sm font-normal truncate">
+                  {item?.assignee?.name}
+                </span>
+              </div>
+
+              <button className="text-xl text-slate-500 cursor-pointer">
+                ...
+              </button>
             </div>
-          </div>
-
-          <button className="text-xl text-slate-500 cursor-pointer">...</button>
-        </div>
+          );
+        })}
       </div>
+
       <Link
-        href={`/project/{projectId}/epics/new`}
+        href={`/project/${projectId}/tasks/new`}
         className="lg:block fixed bottom-10 right-10 h-10 w-10 rounded-lg btn-primaryy flex items-center justify-center"
       >
         <PlusIcon width={27} height={27} className="mt-3.5 ml-3.5" />

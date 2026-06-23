@@ -5,7 +5,7 @@ type EmptyStateProps = {
   title: string;
   description: string;
   buttonText: string;
-  href: string;
+  href?: string;
 };
 
 export default function EmptyState({

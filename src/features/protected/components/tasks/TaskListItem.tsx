@@ -1,9 +1,8 @@
 import Link from "next/link";
-import { ListProjectEpics, Task } from "../../types/protected.types";
+import { Task } from "../../types/protected.types";
 import { formatDate, formatDate2 } from "../../utils/formatDate";
 import { getAvatarInitials } from "../../utils/getAvatarInitials";
 import DateIcon from "@/src/icons/date.svg";
-import PlusCircle from "@/src/icons/plusCircle.svg";
 export default function TaskListItem({ task }: { task: Task }) {
   const assigneeName = task.assignee?.name ?? "Unassigned";
   return (
@@ -17,7 +16,7 @@ export default function TaskListItem({ task }: { task: Task }) {
         py-5
         border
         rounded-md
-        border-slate-200
+        border-slate-200 my-2
       "
       >
         <div className="flex items-center gap-4">

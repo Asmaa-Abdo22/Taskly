@@ -8,7 +8,7 @@ import { AddNewTaskForm, addNewTaskSchema } from "../schemas/addNewTaskSchema";
 import toast from "react-hot-toast";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { useGetProjectEpics } from "./useGetAllEpics";
-import { ListProjectEpics, Member } from "../types/protected.types";
+import { Member } from "../types/protected.types";
 import { useGetProjectMembers } from "./useGetProjectMembers";
 
 export const useAddNewTask = () => {
@@ -16,14 +16,15 @@ export const useAddNewTask = () => {
   const [projectMembers, setProjectMembers] = useState<Member[]>([]);
   // get epic id from search params
   const epicIdParam = useSearchParams().get("epicId");
+  // get status search params
+  const statusParam = useSearchParams().get("status");
   const newTaskForm = useForm<AddNewTaskForm>({
     resolver: zodResolver(addNewTaskSchema),
     defaultValues: {
-      status: "TO_DO",
+      status: (statusParam as AddNewTaskForm["status"]) || "TO_DO",
       epic_id: epicIdParam || "",
     },
   });
-  const { getValues, setValue } = newTaskForm;
   const params = useParams();
   const projectId = params.projectId as string;
   const router = useRouter();
@@ -58,6 +59,7 @@ export const useAddNewTask = () => {
       }
       newTaskForm.reset();
       toast.success("Task Added Successfully");
+      router.push(`/project/${projectId}/tasks?view=board`);
     } catch (error) {
       if (error instanceof Error) {
         throw new Error(error.message);

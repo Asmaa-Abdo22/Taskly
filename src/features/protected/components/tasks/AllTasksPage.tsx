@@ -1,15 +1,14 @@
 "use client";
 import Link from "next/link";
-import { useParams } from "next/navigation";
 import SearchIcon from "@/src/icons/search.svg";
 import Dashboard from "@/src/icons/dashboard.svg";
 import List from "@/src/icons/list.svg";
 import ViewIcon from "@/src/icons/view.png";
 import Image from "next/image";
-import ToDoCard from "@/src/features/protected/components/tasks/ToDoCard";
+import BoardView from "./BoardView";
+import { useGeTasksView } from "../../hooks/useGetTasksView";
 export default function AllTasksPage() {
-  const params = useParams();
-  const projectId = params.projectId as string;
+  const { projectId } = useGeTasksView();
   return (
     <>
       <div className="allTasks md:px-0 px-5">
@@ -69,7 +68,7 @@ export default function AllTasksPage() {
               <option value="">
                 {" "}
                 {/* <Dashboard width={30} height={30} className="" /> */}
-                 Board View
+                Board View
               </option>
               <option value="">
                 {/* <List width={30} height={30} className="" /> */}
@@ -85,53 +84,7 @@ export default function AllTasksPage() {
         </div>
 
         {/* BODY */}
-        <div className="hidden md:grid grid-flow-col auto-cols-[280px] gap-3 overflow-x-auto">
-          <div className="toDo flex flex-col gap-3  p-1">
-            {/* title */}
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2 ">
-                <div className="circle bg-slate-300 rounded-full h-2 w-2"></div>
-                <p className="uppercase text-slate-700 font-bold text-[11px] ">
-                  to do
-                </p>
-                <div className="number bg-surface-highest flex items-center justify-center py-1  px-2 rounded-md font-bold text-[10px]">
-                  <span>2</span>
-                </div>
-              </div>
-              <Link
-                href={`/project/${projectId}/tasks/new`}
-                className="cursor-pointer text-[20px] text-slate-400"
-              >
-                {" "}
-                +
-              </Link>
-            </div>
-            {/* add task */}
-            <Link
-              href={`/project/${projectId}/tasks/new`}
-              className="
-        cursor-pointer
-                    border
-                   border-dashed
-                   border-slate-300
-                    text-center
-                    py-3
-                    rounded-md
-                    font-bold
-                    text-[12px]
-                    text-slate-600
-                    uppercase
-                   tracking-widest
-              
-                   w-full 
-                  "
-            >
-              + Add New Task
-            </Link>
-            {/* all todo  tasks */}
-            <ToDoCard />
-          </div>
-        </div>
+        <BoardView projectId={projectId} />
       </div>
     </>
   );

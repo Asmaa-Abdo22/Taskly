@@ -84,11 +84,17 @@ export default function AllTasksPage() {
         </div>
 
         {/* BODY */}
-        {viewType === "board" ? (
-          <BoardView projectId={projectId} />
-        ) : (
-          viewType === "list" && <ListView />
-        )}
+        <div className="hidden lg:block">
+          {viewType === "board" ? (
+            <BoardView projectId={projectId} />
+          ) : (
+            <ListView />
+          )}
+        </div>
+
+        <div className="lg:hidden">
+          <ListView />
+        </div>
       </div>
     </>
   );

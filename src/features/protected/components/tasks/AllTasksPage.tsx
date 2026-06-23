@@ -7,8 +7,15 @@ import ViewIcon from "@/src/icons/view.png";
 import Image from "next/image";
 import BoardView from "./BoardView";
 import { useGeTasksView } from "../../hooks/useGetTasksView";
+import { useRouter, useSearchParams } from "next/navigation";
+import ListView from "./ListView";
 export default function AllTasksPage() {
+  const viewType = useSearchParams().get("view") as string;
   const { projectId } = useGeTasksView();
+  const router = useRouter();
+  const changeTypeInSelcet = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    router.push(`/project/${projectId}/tasks?view=${e.target.value}`);
+  };
   return (
     <>
       <div className="allTasks md:px-0 px-5">
@@ -61,19 +68,14 @@ export default function AllTasksPage() {
             </div>
             {/* view selcet */}
             <select
+              value={viewType || "board"}
+              onChange={changeTypeInSelcet}
               name=""
               id="selectView"
               className="bg-white h-full hidden md:block cursor-pointer py-3 rounded-md px-4 text-[14px] text-slate-900"
             >
-              <option value="">
-                {" "}
-                {/* <Dashboard width={30} height={30} className="" /> */}
-                Board View
-              </option>
-              <option value="">
-                {/* <List width={30} height={30} className="" /> */}
-                List View
-              </option>
+              <option value="board">Board View</option>
+              <option value="list">List View</option>
             </select>
 
             {/* icons */}
@@ -84,7 +86,11 @@ export default function AllTasksPage() {
         </div>
 
         {/* BODY */}
-        <BoardView projectId={projectId} />
+        {viewType === "board" ? (
+          <BoardView projectId={projectId} />
+        ) : (
+          viewType === "list" && <ListView />
+        )}
       </div>
     </>
   );

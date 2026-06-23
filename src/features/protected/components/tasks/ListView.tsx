@@ -1,9 +1,16 @@
-import React from 'react'
+import ListViewDesktop from "./ListViewDesktop";
+import ListViewMobile from "./ListViewMobile";
 
-const ListView = () => {
+export default function ListView() {
   return (
-    <div>List View</div>
-  )
-}
+    <>
+      <div className="hidden lg:block">
+        <ListViewDesktop />
+      </div>
 
-export default ListView
+      <div className="lg:hidden">
+        <ListViewMobile />
+      </div>
+    </>
+  );
+}

@@ -11,7 +11,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import ListView from "./ListView";
 export default function AllTasksPage() {
   const viewType = useSearchParams().get("view") as string;
-  const { projectId } = useGeTasksView();
+  const { projectId, allTasksView } = useGeTasksView();
   const router = useRouter();
   const changeTypeInSelcet = (e: React.ChangeEvent<HTMLSelectElement>) => {
     router.push(`/project/${projectId}/tasks?view=${e.target.value}`);

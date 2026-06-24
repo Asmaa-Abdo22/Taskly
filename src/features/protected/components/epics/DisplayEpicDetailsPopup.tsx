@@ -365,7 +365,8 @@ export default function EpicDetailsModal({
                   text-slate-600 block md:hidden
                 "
               >
-                {allTasks?.length || 0} {allTasks?.length===1? "TASK":"TASKS"}
+                {allTasks?.length || 0}{" "}
+                {allTasks?.length === 1 ? "TASK" : "TASKS"}
               </div>
               <Link
                 href={`/project/${projectId}/tasks/new?epicId=${epicIdParam}`}
@@ -388,9 +389,32 @@ export default function EpicDetailsModal({
             {tasksLoading ? (
               <TasksSkeleton />
             ) : allTasks && allTasks.length > 0 ? (
-              allTasks?.map((item) => (
-                <TaskListItem key={item.id} task={item} />
-              ))
+              <>
+                {allTasks.map((item) => (
+                  <TaskListItem key={item.id} task={item} />
+                ))}
+                <Link
+                  href={`/project/${projectId}/tasks/new?epicId=${epicId}`}
+                  className="
+        cursor-pointer
+        block md:hidden
+        mt-5
+        border
+        border-dashed
+        border-slate-300
+        text-center
+        py-3
+        rounded-md
+        font-bold
+        text-[12px]
+        text-slate-600
+        uppercase
+        tracking-widest
+      "
+                >
+                  + Add New Task
+                </Link>
+              </>
             ) : (
               <div className="mt-4 rounded-2xl border border-dashed border-slate-300 bg-surface-low p-8 md:p-12">
                 <div className="flex flex-col items-center text-center">

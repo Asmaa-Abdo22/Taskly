@@ -1,13 +1,24 @@
 import Link from "next/link";
 import { Task } from "../../types/protected.types";
-import { formatDate, formatDate2 } from "../../utils/formatDate";
+import { formatDate } from "../../utils/formatDate";
 import { getAvatarInitials } from "../../utils/getAvatarInitials";
 import DateIcon from "@/src/icons/date.svg";
+import { useAppDispatch, useAppSelector } from "@/src/store/hooks";
+import { openTaskDetails } from "../../slices/taskDetailsSlice";
+import TaskDetailsPopup from "./TaskDetailsPopup";
 export default function TaskListItem({ task }: { task: Task }) {
   const assigneeName = task.assignee?.name ?? "Unassigned";
+  const dispatch = useAppDispatch();
+  const selectedTaskId = useAppSelector(
+    (state) => state.taskDetails.selectedTaskId,
+  );
   return (
     <>
       <div
+        onClick={() => {
+          console.log("task id clicked", task.id);
+          dispatch(openTaskDetails(task.id));
+        }}
         className="
         flex
         items-center
@@ -17,6 +28,7 @@ export default function TaskListItem({ task }: { task: Task }) {
         border
         rounded-md
         border-slate-200 my-2
+        cursor-pointer
       "
       >
         <div className="flex items-center gap-4">
@@ -72,37 +84,16 @@ export default function TaskListItem({ task }: { task: Task }) {
             Due Date
           </p>
 
-         <div className="flex items-center gap-1">
-             <DateIcon width={16} height={16} className="mt-7 md:hidden" />
-               <p className=" mt-6 md:mt-1 text-[11px] md:text-body-md text-slate-700">
-            {formatDate(task.due_date)}
-          </p>
-
-         </div>
-        
+          <div className="flex items-center gap-1">
+            <DateIcon width={16} height={16} className="mt-7 md:hidden" />
+            <p className=" mt-6 md:mt-1 text-[11px] md:text-body-md text-slate-700">
+              {formatDate(task.due_date)}
+            </p>
+          </div>
         </div>
       </div>
-      <Link
-        href={`/project/${task.project_id}/tasks/new?epicId=${task.epic_id}`}
-        className="
-        cursor-pointer
-        block md:hidden
-                    mt-5
-                    border
-                   border-dashed
-                   border-slate-300
-                    text-center
-                    py-3
-                    rounded-md
-                    font-bold
-                    text-[12px]
-                    text-slate-600
-                    uppercase
-                   tracking-widest
-                  "
-      >
-        + Add New Task
-      </Link>
+
+      {selectedTaskId && <TaskDetailsPopup />}
     </>
   );
 }

@@ -12,10 +12,10 @@ export const STATUSES = [
     statusText: "text-slate-800",
   },
   {
-    status: "IN_PROGRESS",
-    bgColor: "bg-surface-highest",
-    statusText: "text-slate-700",
-  },
+  status: "IN_PROGRESS",
+  bgColor: "bg-blue-100",
+  statusText: "text-blue-700",
+},
   {
     status: "BLOCKED",
     bgColor: "bg-red-100",

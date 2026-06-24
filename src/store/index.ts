@@ -1,5 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
 import authReducer from "@/src/features/auth/store/authSlice";
+import taskDetailsReducer from "@/src/features/protected/slices/taskDetailsSlice";
 
 /**
  * Global Redux store.
@@ -13,6 +14,7 @@ import authReducer from "@/src/features/auth/store/authSlice";
 export const store = configureStore({
   reducer: {
     auth: authReducer,
+    taskDetails: taskDetailsReducer,
   },
 });
 

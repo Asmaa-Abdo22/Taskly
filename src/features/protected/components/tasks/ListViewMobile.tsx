@@ -3,6 +3,8 @@ import { Task } from "../../types/protected.types";
 import { formatDate } from "../../utils/formatDate";
 import { getAvatarInitials } from "../../utils/getAvatarInitials";
 import { STATUSES } from "./ListViewDesktop";
+import { useAppDispatch } from "@/src/store/hooks";
+import { openTaskDetails } from "../../slices/taskDetailsSlice";
 
 export default function ListViewMobile({
   allTasks,
@@ -11,6 +13,7 @@ export default function ListViewMobile({
   allTasks: Task[];
   projectId: string;
 }) {
+  const dispatch = useAppDispatch();
   return (
     <>
       <Link
@@ -38,7 +41,11 @@ export default function ListViewMobile({
             (status) => status.status === item.status,
           );
           return (
-            <div key={item.id} className="rounded-2xl  bg-white p-4">
+            <div
+              onClick={() => dispatch(openTaskDetails(item.id))}
+              key={item.id}
+              className="rounded-2xl cursor-pointer bg-white p-4"
+            >
               <div className="flex items-start justify-between gap-4">
                 <div>
                   <p className="text-xs font-bold uppercase tracking-wide text-slate-400/90">

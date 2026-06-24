@@ -7,6 +7,8 @@ import type { Task } from "../../types/protected.types";
 import { getAvatarInitials } from "../../utils/getAvatarInitials";
 import TodoCardSkeleton from "./statusColSkeleton";
 import { formatDate } from "../../utils/formatDate";
+import { useAppDispatch } from "@/src/store/hooks";
+import { openTaskDetails } from "../../slices/taskDetailsSlice";
 
 type Props = {
   projectId: string;
@@ -32,7 +34,7 @@ export default function StatusColumn({
   if (tasksViewError) {
     throw tasksViewError;
   }
-
+  const dispatch = useAppDispatch();
   const getCardStyles = () => {
     switch (status) {
       case "IN_PROGRESS":
@@ -132,6 +134,7 @@ export default function StatusColumn({
       ) : (
         allTasksView.map((task: Task) => (
           <div
+            onClick={() => dispatch(openTaskDetails(task.id))}
             key={task.id}
             className={`
         rounded-xl
@@ -141,6 +144,7 @@ export default function StatusColumn({
         flex-col
         justify-between
         ${styles.card}
+        cursor-pointer
       `}
           >
             <h3 className="text-[14px] font-medium text-slate-900 leading-7">

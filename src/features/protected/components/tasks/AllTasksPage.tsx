@@ -7,6 +7,8 @@ import BoardView from "./BoardView";
 import { useGetTasksView } from "../../hooks/useGetTasksView";
 import { useRouter, useSearchParams } from "next/navigation";
 import ListView from "./ListView";
+import { useAppSelector } from "@/src/store/hooks";
+import TaskDetailsPopup from "./TaskDetailsPopup";
 export default function AllTasksPage() {
   const viewType = useSearchParams().get("view") as string;
   const { projectId } = useGetTasksView();
@@ -14,6 +16,9 @@ export default function AllTasksPage() {
   const changeTypeInSelcet = (e: React.ChangeEvent<HTMLSelectElement>) => {
     router.push(`/project/${projectId}/tasks?view=${e.target.value}`);
   };
+  const selectedTaskId = useAppSelector(
+    (state) => state.taskDetails.selectedTaskId,
+  );
   return (
     <>
       <div className="allTasks md:px-0 px-5">
@@ -95,6 +100,7 @@ export default function AllTasksPage() {
         <div className="lg:hidden">
           <ListView />
         </div>
+        {selectedTaskId && <TaskDetailsPopup />}
       </div>
     </>
   );

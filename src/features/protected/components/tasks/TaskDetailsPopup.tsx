@@ -7,10 +7,14 @@ import TaskDetailsPopupSkeleton from "./TaskDetailsPopupSkeleton";
 import { getAvatarInitials } from "../../utils/getAvatarInitials";
 import { formatDate } from "../../utils/formatDate";
 import { useTaskDetailsPopup } from "../../hooks/useGetTaskDetailsPopup";
+import EmptyState from "../EmptyState";
 
 const TaskDetailsPopup = () => {
-  const { task, loading, error, currentStatus, closePopup } =
+  const { task, loading, error, currentStatus, closePopup, projectId } =
     useTaskDetailsPopup();
+  if (error) {
+    throw new Error("Failed to load task details");
+  }
   return (
     <>
       <div
@@ -33,10 +37,13 @@ const TaskDetailsPopup = () => {
         >
           {loading ? (
             <TaskDetailsPopupSkeleton />
-          ) : error ? (
-            <div className="p-8 text-center">Failed to load task details</div>
           ) : !task ? (
-            <div className="p-8 text-center">Task not found</div>
+            <EmptyState
+              title="Task not found"
+              description="The requested task could not be found."
+              buttonText="Back to Tasks"
+              href={`/project/${projectId}/tasks?view=board`}
+            />
           ) : (
             <>
               {/* DESKTOP */}

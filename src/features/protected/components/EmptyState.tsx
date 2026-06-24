@@ -24,7 +24,7 @@ export default function EmptyState({
       <p className="mb-10 max-w-md text-slate-500">{description}</p>
 
       <Link
-        href="/project/add"
+        href={href ?? "/project/add"}
         className="flex items-center font-semibold text-[16px] btn btn-primaryy "
       >
         <PlusIcon width={24} height={24} className="mt-3" />

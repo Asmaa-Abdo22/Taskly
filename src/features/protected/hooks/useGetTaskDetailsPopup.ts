@@ -48,6 +48,7 @@ export const useTaskDetailsPopup = () => {
     : null;
 
   return {
+    projectId,
     ...state,
     currentStatus,
     closePopup: () => dispatch(closeTaskDetails()),

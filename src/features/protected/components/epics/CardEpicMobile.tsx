@@ -11,7 +11,7 @@ export default function MobileEpicCard({
   onClick: () => void;
 }) {
   return (
-    <div onClick={onClick} className="bg-white rounded-xl p-4 ">
+    <div onClick={onClick} className="bg-white rounded-xl p-4 cursor-pointer">
       {/* Header */}
       <div className="flex justify-between items-start mb-4">
         <span className="px-2 py-1 bg-surface-highest rounded  text-primaryy text-label-sm ">

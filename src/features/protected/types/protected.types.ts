@@ -31,11 +31,22 @@ export interface ProjectsPaginationParams {
   projectId?: string;
 }
 
-export interface ProjectsPaginationMeta {
+export interface PaginationMeta {
   totalCount: number;
   startIndex: number | null;
   endIndex: number | null;
 }
+
+export type ProjectsPaginationMeta = PaginationMeta;
+
+export interface TasksPaginationParams {
+  projectId: string;
+  limit: number;
+  offset: number;
+  status?: string;
+}
+
+export type TasksPaginationMeta = PaginationMeta;
 export type MemberRole = "owner" | "admin" | "member" | "viewer";
 
 export interface Member {

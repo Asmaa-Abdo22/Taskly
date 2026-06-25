@@ -1,68 +1,93 @@
 "use server";
 
 import { getAuthTokens } from "../../auth/utils/sessionCookies";
+import type { TasksPaginationParams } from "../types/protected.types";
+import { emptyPagination, parseContentRange } from "../utils/parseContentRange";
+
+const parseResponse = async (response: Response) => {
+  try {
+    return await response.json();
+  } catch {
+    return null;
+  }
+};
+
 //& Get Tasks Board View
-export const getTasksViewApi = async (
-  projectId: string,
-  taskStatus: string,
-) => {
+export const getTasksViewApi = async ({
+  projectId,
+  status,
+  limit,
+  offset,
+}: TasksPaginationParams) => {
   const { accessToken } = await getAuthTokens();
 
   if (!accessToken) {
     return {
       response: { ok: false, status: 401 },
-      result: { message: "Unauthorized" },
+      result: null,
+      pagination: emptyPagination,
     };
   }
 
   const response = await fetch(
-    `${process.env.SUPABASE_URL}/rest/v1/project_tasks?project_id=eq.${projectId}&status=eq.${taskStatus}`,
+    `${process.env.SUPABASE_URL}/rest/v1/project_tasks?project_id=eq.${projectId}&status=eq.${status}&limit=${limit}&offset=${offset}`,
     {
       method: "GET",
       headers: {
         apikey: process.env.SUPABASE_PUBLISHABLE_KEY!,
         Authorization: `Bearer ${accessToken}`,
         "Content-Type": "application/json",
+        Prefer: "count=exact",
       },
     },
   );
 
-  const result = await response.json();
+  const result = await parseResponse(response);
+  const pagination = parseContentRange(response.headers.get("Content-Range"));
 
   return {
     response: { ok: response.ok, status: response.status },
     result,
+    pagination,
   };
 };
 
 //* Get Tasks List View
 
-export const getTasksListApi = async (projectId: string) => {
+export const getTasksListApi = async ({
+  projectId,
+  limit,
+  offset,
+}: TasksPaginationParams) => {
   const { accessToken } = await getAuthTokens();
 
   if (!accessToken) {
     return {
       response: { ok: false, status: 401 },
-      result: { message: "Unauthorized" },
+      result: null,
+      pagination: emptyPagination,
     };
   }
 
   const response = await fetch(
-    `${process.env.SUPABASE_URL}/rest/v1/project_tasks?project_id=eq.${projectId}`,
+    `${process.env.SUPABASE_URL}/rest/v1/project_tasks?project_id=eq.${projectId}&limit=${limit}&offset=${offset}`,
     {
       method: "GET",
       headers: {
         apikey: process.env.SUPABASE_PUBLISHABLE_KEY!,
         Authorization: `Bearer ${accessToken}`,
         "Content-Type": "application/json",
+        Prefer: "count=exact",
       },
     },
   );
 
-  const result = await response.json();
+  const result = await parseResponse(response);
+  const pagination = parseContentRange(response.headers.get("Content-Range"));
 
   return {
     response: { ok: response.ok, status: response.status },
     result,
+    pagination,
   };
 };

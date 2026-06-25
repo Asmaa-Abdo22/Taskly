@@ -5,13 +5,19 @@ import { getAvatarInitials } from "../../utils/getAvatarInitials";
 import { STATUSES } from "./ListViewDesktop";
 import { useAppDispatch } from "@/src/store/hooks";
 import { openTaskDetails } from "../../slices/taskDetailsSlice";
+import MembersSkeleton from "../members/MemberSkeleton";
+import type { RefObject } from "react";
 
 export default function ListViewMobile({
   allTasks,
   projectId,
+  observerRef,
+  infiniteScrollLoading,
 }: {
   allTasks: Task[];
   projectId: string;
+  observerRef: RefObject<HTMLDivElement | null>;
+  infiniteScrollLoading: boolean;
 }) {
   const dispatch = useAppDispatch();
   return (
@@ -86,6 +92,8 @@ export default function ListViewMobile({
             </div>
           );
         })}
+        {infiniteScrollLoading && <MembersSkeleton />}
+        <div ref={observerRef} />
       </div>
     </>
   );

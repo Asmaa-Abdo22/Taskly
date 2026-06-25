@@ -25,12 +25,49 @@ export default function StatusColumn({
   circleColor,
   countBg,
 }: Props) {
-  const { getTasksView, allTasksView, tasksViewLoading, tasksViewError } =
-    useGetTasksView();
+  const {
+    getTasksView,
+    allTasksView,
+    tasksViewLoading,
+    tasksViewError,
+    tasksViewInfiniteScrollLoading,
+    tasksViewObserverRef,
+    tasksViewTotalCount,
+    tasksViewHasNextPage,
+    getNextTasksViewPage,
+  } = useGetTasksView();
 
   useEffect(() => {
     getTasksView(status);
-  }, [status]);
+  }, [getTasksView, status]);
+
+  useEffect(() => {
+    if (
+      tasksViewLoading ||
+      tasksViewInfiniteScrollLoading ||
+      !tasksViewHasNextPage ||
+      !tasksViewObserverRef.current
+    ) {
+      return;
+    }
+
+    const observer = new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting) {
+        getNextTasksViewPage();
+      }
+    });
+
+    observer.observe(tasksViewObserverRef.current);
+
+    return () => observer.disconnect();
+  }, [
+    getNextTasksViewPage,
+    tasksViewHasNextPage,
+    tasksViewInfiniteScrollLoading,
+    tasksViewLoading,
+    tasksViewObserverRef,
+  ]);
+
   if (tasksViewError) {
     throw tasksViewError;
   }
@@ -79,7 +116,7 @@ export default function StatusColumn({
           <div
             className={`${countBg} rounded-md px-2 py-1 text-[10px] font-bold`}
           >
-            {allTasksView?.length || 0}
+            {tasksViewTotalCount || 0}
           </div>
         </div>
 
@@ -175,6 +212,12 @@ export default function StatusColumn({
           </div>
         ))
       )}
+      {tasksViewInfiniteScrollLoading && (
+        <div className="text-center py-5">
+          <TodoCardSkeleton />
+        </div>
+      )}
+      <div ref={tasksViewObserverRef} />
     </div>
   );
 }

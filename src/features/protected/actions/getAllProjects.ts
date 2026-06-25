@@ -1,10 +1,8 @@
 "use server";
 
 import { getAuthTokens } from "../../auth/utils/sessionCookies";
-import type {
-  ProjectsPaginationMeta,
-  ProjectsPaginationParams,
-} from "../types/protected.types";
+import { emptyPagination, parseContentRange } from "../utils/parseContentRange";
+import type { ProjectsPaginationParams } from "../types/protected.types";
 
 const parseResponse = async (response: Response) => {
   try {
@@ -12,32 +10,6 @@ const parseResponse = async (response: Response) => {
   } catch {
     return null;
   }
-};
-
-const emptyPagination: ProjectsPaginationMeta = {
-  totalCount: 0,
-  startIndex: null,
-  endIndex: null,
-};
-
-const parseContentRange = (
-  contentRange: string | null,
-): ProjectsPaginationMeta => {
-  if (!contentRange) {
-    return emptyPagination;
-  }
-
-  const match = contentRange.match(/^(\d+)-(\d+)\/(\d+|\*)$/);
-
-  if (!match) {
-    return emptyPagination;
-  }
-
-  return {
-    startIndex: Number(match[1]),
-    endIndex: Number(match[2]),
-    totalCount: match[3] === "*" ? 0 : Number(match[3]),
-  };
 };
 
 export const getAllProjects = async ({

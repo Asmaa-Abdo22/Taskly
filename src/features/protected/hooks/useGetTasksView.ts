@@ -8,7 +8,7 @@ import { usePagination } from "./usePagination";
 
 export type TasksLoadingType = "initial" | "pagination" | "infinite";
 
-export const TASKS_PAGE_LIMIT = 5;
+export const TASKS_PAGE_LIMIT = 4;
 
 export const useGetTasksView = () => {
   const [tasksViewLoading, setTasksViewLoading] = useState(true);

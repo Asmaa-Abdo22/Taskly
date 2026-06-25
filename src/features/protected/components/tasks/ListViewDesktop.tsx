@@ -136,7 +136,7 @@ export default function ListViewDesktop({
 
       <Link
         href={`/project/${projectId}/tasks/new`}
-        className="lg:block fixed bottom-10 right-10 h-10 w-10 rounded-lg btn-primaryy flex items-center justify-center"
+        className="lg:block fixed bottom-5 right-10 h-10 w-10 rounded-lg btn-primaryy flex items-center justify-center"
       >
         <PlusIcon width={27} height={27} className="mt-3.5 ml-3.5" />
       </Link>

@@ -1,7 +1,6 @@
 import { useGetTasksView } from "../../hooks/useGetTasksView";
 import EmptyState from "../EmptyState";
 import MembersSkeleton from "../members/MemberSkeleton";
-import Pagination from "../Pagination";
 import ListViewDesktop from "./ListViewDesktop";
 import ListViewMobile from "./ListViewMobile";
 
@@ -16,7 +15,6 @@ export default function ListView() {
     tasksListObserverRef,
     tasksListCurrentPage,
     tasksListTotalPages,
-    tasksListPageNumbers,
     tasksListTotalCount,
     handleTasksListPageChange,
   } = useGetTasksView();
@@ -48,13 +46,34 @@ export default function ListView() {
           <p className="text-body-md text-slate-700">
             Showing {allTasksList.length} of {tasksListTotalCount} active tasks
           </p>
-          <Pagination
-            currentPage={tasksListCurrentPage}
-            totalPages={tasksListTotalPages}
-            pageNumbers={tasksListPageNumbers}
-            loading={tasksListPaginationLoading}
-            onPageChange={handleTasksListPageChange}
-          />
+          <div className="flex items-center gap-4 rounded-md  px-4 py-3">
+            <button
+              type="button"
+              aria-label="Previous page"
+              disabled={tasksListCurrentPage === 1 || tasksListPaginationLoading}
+              onClick={() => handleTasksListPageChange(tasksListCurrentPage - 1)}
+              className="cursor-pointer text-slate-700 disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              ‹
+            </button>
+
+            <span className="text-body-md text-slate-700">
+              Page {tasksListCurrentPage} of {tasksListTotalPages}
+            </span>
+
+            <button
+              type="button"
+              aria-label="Next page"
+              disabled={
+                tasksListCurrentPage === tasksListTotalPages ||
+                tasksListPaginationLoading
+              }
+              onClick={() => handleTasksListPageChange(tasksListCurrentPage + 1)}
+              className="cursor-pointer text-slate-700 disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              ›
+            </button>
+          </div>
         </div>
       </div>
 

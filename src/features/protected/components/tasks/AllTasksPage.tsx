@@ -11,7 +11,9 @@ import { useAppSelector } from "@/src/store/hooks";
 import TaskDetailsPopup from "./TaskDetailsPopup";
 export default function AllTasksPage() {
   const viewType = useSearchParams().get("view") as string;
-  const { projectId } = useGetTasksView();
+  const { projectId, searchTerm, handleSearchChange } = useGetTasksView({
+    enableTasksList: false,
+  });
   const router = useRouter();
   const changeTypeInSelcet = (e: React.ChangeEvent<HTMLSelectElement>) => {
     router.push(`/project/${projectId}/tasks?view=${e.target.value}`);
@@ -64,7 +66,9 @@ export default function AllTasksPage() {
                 <input
                   id="searchEpics"
                   type="text"
-                  placeholder="Search Epics..."
+                  value={searchTerm}
+                  onChange={(e) => handleSearchChange(e.target.value)}
+                  placeholder="Search tasks..."
                   className="w-full md:w-1/2 md:pl-6 pl-6 placeholder:text-[#737685] px-3 py-4 text-body-md text-slate-900 bg-surface-highest border-transparent rounded-md focus:outline-none transition-colors"
                 />
               </div>

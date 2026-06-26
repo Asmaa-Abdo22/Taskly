@@ -29,6 +29,7 @@ export interface ProjectsPaginationParams {
   limit: number;
   offset: number;
   projectId?: string;
+  searchTerm?: string;
 }
 
 export interface PaginationMeta {

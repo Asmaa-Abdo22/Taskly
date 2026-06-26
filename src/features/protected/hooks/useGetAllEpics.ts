@@ -14,6 +14,8 @@ export const useGetProjectEpics = () => {
   const params = useParams();
   const projectId = params.projectId as string;
   const [allEpics, setAllEpics] = useState<ListProjectEpics[]>([]);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
   const [totalCount, setTotalCount] = useState(0);
   const [error, setError] = useState<Error | string>("");
   const [isMobile, setIsMobile] = useState<boolean | null>(null);
@@ -26,7 +28,6 @@ export const useGetProjectEpics = () => {
 
   const observerRef = useRef<HTMLDivElement | null>(null);
   const latestRequestRef = useRef(0);
-  const isFetchingRef = useRef(false);
 
   const limit = PROJECTS_PAGE_LIMIT;
   const { currentPage, setCurrentPage, totalPages, pageNumbers, hasNextPage } =
@@ -38,12 +39,6 @@ export const useGetProjectEpics = () => {
 
   const getProjectEpics = useCallback(
     async (page: number, loadingType: ProjectsLoadingType = "initial") => {
-      if (isFetchingRef.current) {
-        return;
-      }
-
-      isFetchingRef.current = true;
-
       const requestId = latestRequestRef.current + 1;
       latestRequestRef.current = requestId;
 
@@ -68,6 +63,7 @@ export const useGetProjectEpics = () => {
           limit,
           offset,
           projectId,
+          searchTerm: debouncedSearchTerm,
         };
 
         const { response, result, pagination } = await getEpicsApi(params);
@@ -79,7 +75,9 @@ export const useGetProjectEpics = () => {
 
         if (!response.ok) {
           throw new Error(
-            "We're having trouble retrieving your project epics right now. Please try again in a moment.",
+            debouncedSearchTerm
+              ? "Failed to search epics"
+              : "We're having trouble retrieving your project epics right now. Please try again in a moment.",
           );
         }
 
@@ -99,11 +97,15 @@ export const useGetProjectEpics = () => {
             : projectsResult,
         );
       } catch (err) {
-        if (err instanceof Error) {
-          setError(err);
+        if (latestRequestRef.current === requestId && err instanceof Error) {
+          setError(
+            debouncedSearchTerm ? new Error("Failed to search epics") : err,
+          );
         }
       } finally {
-        isFetchingRef.current = false;
+        if (latestRequestRef.current !== requestId) {
+          return;
+        }
 
         if (loadingType === "initial") {
           setLoading(false);
@@ -118,8 +120,18 @@ export const useGetProjectEpics = () => {
         }
       }
     },
-    [limit, router, setCurrentPage],
+    [debouncedSearchTerm, limit, projectId, router, setCurrentPage],
   );
+
+  useEffect(() => {
+    const timer = window.setTimeout(() => {
+      setDebouncedSearchTerm(searchTerm.trim());
+    }, 300);
+
+    return () => {
+      window.clearTimeout(timer);
+    };
+  }, [searchTerm]);
   useEffect(() => {
     const mediaQuery = window.matchMedia("(max-width: 767px)");
 
@@ -141,11 +153,18 @@ export const useGetProjectEpics = () => {
       return;
     }
 
-    setAllEpics([]);
-    setCurrentPage(1);
+    let cancelled = false;
 
-    getProjectEpics(1, "initial");
-  }, [getProjectEpics, isMobile, setCurrentPage]);
+    void Promise.resolve().then(() => {
+      if (!cancelled) {
+        getProjectEpics(1, "initial");
+      }
+    });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [debouncedSearchTerm, getProjectEpics, isMobile]);
 
   useEffect(() => {
     if (
@@ -184,10 +203,16 @@ export const useGetProjectEpics = () => {
     getProjectEpics(page, "pagination");
   };
 
+  const handleSearchChange = (value: string) => {
+    setSearchTerm(value);
+  };
+
   return {
     loading,
     getProjectEpics,
     allEpics,
+    searchTerm,
+    debouncedSearchTerm,
     error,
 
     paginationLoading,
@@ -203,6 +228,7 @@ export const useGetProjectEpics = () => {
     hasNextPage,
     projectId,
     handlePageChange,
+    handleSearchChange,
     selectedEpicId,
     setSelectedEpicId
   };

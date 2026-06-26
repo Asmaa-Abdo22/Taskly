@@ -8,7 +8,13 @@ import Design from "@/src/icons/epics/design.svg";
 import Container from "@/src/icons/epics/Container.svg";
 import Create from "@/src/icons/epics/create.svg";
 
-const EpicEmpty = ({ projectId }: { projectId: String }) => {
+const EpicEmpty = ({
+  projectId,
+  title = "No epics found for this project",
+}: {
+  projectId: string;
+  title?: string;
+}) => {
   return (
     <div className="w-full min-h-[calc(100vh-180px)] flex flex-col items-center justify-center px-4 ">
       {/* Illustration */}
@@ -18,7 +24,7 @@ const EpicEmpty = ({ projectId }: { projectId: String }) => {
 
       {/* Title */}
       <h2 className="text-center text-[20px] md:text-[22px] font-semibold text-slate-900">
-        No epics in this project yet.
+        {title}
       </h2>
 
       {/* Description */}

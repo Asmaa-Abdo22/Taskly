@@ -16,6 +16,8 @@ const GetAllEpicsPage = () => {
     selectedEpicId,
     setSelectedEpicId,
     allEpics,
+    searchTerm,
+    debouncedSearchTerm,
     error,
     loading,
     paginationLoading,
@@ -28,10 +30,13 @@ const GetAllEpicsPage = () => {
     projectId,
     totalCount,
     handlePageChange,
+    handleSearchChange,
   } = useGetProjectEpics();
 
   if (!loading && !error && allEpics.length === 0) {
-    return <EpicEmpty projectId={projectId} />;
+    if (!debouncedSearchTerm) {
+      return <EpicEmpty projectId={projectId} />;
+    }
   }
 
   if (error) {
@@ -84,7 +89,9 @@ const GetAllEpicsPage = () => {
               <input
                 id="searchEpics"
                 type="text"
-                placeholder="Search Epics..."
+                placeholder="Search epics..."
+                value={searchTerm}
+                onChange={(event) => handleSearchChange(event.target.value)}
                 className="w-full md:w-1/2 md:pl-6 pl-6 placeholder:text-[#737685] px-3 py-4 text-body-md text-slate-900 bg-surface-highest border-transparent rounded-md focus:outline-none transition-colors"
               />
             </div>
@@ -101,15 +108,24 @@ const GetAllEpicsPage = () => {
       </div>
 
       <div className="hidden md:grid md:grid-cols-2 gap-5 my-7">
-        {allEpics.map((item) => (
-          <EpicCardDesktop
-            key={item.id}
-            epic={item}
-            onClick={() => {
-              setSelectedEpicId(item.id);
-            }}
-          />
-        ))}
+        {allEpics.length === 0 ? (
+          <div className="md:col-span-2">
+            <EpicEmpty
+              projectId={projectId}
+              title="No epics found matching your search"
+            />
+          </div>
+        ) : (
+          allEpics.map((item) => (
+            <EpicCardDesktop
+              key={item.id}
+              epic={item}
+              onClick={() => {
+                setSelectedEpicId(item.id);
+              }}
+            />
+          ))
+        )}
       </div>
       {selectedEpicId && (
         <EpicDetailsModal
@@ -121,13 +137,20 @@ const GetAllEpicsPage = () => {
       )}
 
       <div className="md:hidden grid grid-cols-1 gap-5 my-7">
-        {allEpics.map((item) => (
-          <MobileEpicCard
-            key={item.id}
-            epic={item}
-            onClick={() => setSelectedEpicId(item.id)}
+        {allEpics.length === 0 ? (
+          <EpicEmpty
+            projectId={projectId}
+            title="No epics found matching your search"
           />
-        ))}
+        ) : (
+          allEpics.map((item) => (
+            <MobileEpicCard
+              key={item.id}
+              epic={item}
+              onClick={() => setSelectedEpicId(item.id)}
+            />
+          ))
+        )}
       </div>
 
       <Link

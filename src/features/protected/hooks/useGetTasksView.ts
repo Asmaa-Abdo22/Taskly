@@ -477,5 +477,7 @@ export const useGetTasksView = ({
     handleTasksListPageChange,
     searchTerm,
     handleSearchChange,
+    setAllTasksView,
+    setTasksViewTotalCount,
   };
 };

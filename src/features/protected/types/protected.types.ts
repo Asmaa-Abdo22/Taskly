@@ -45,6 +45,7 @@ export interface TasksPaginationParams {
   limit: number;
   offset: number;
   status?: string;
+  searchTerm?:string
 }
 
 export type TasksPaginationMeta = PaginationMeta;

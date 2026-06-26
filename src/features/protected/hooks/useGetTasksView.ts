@@ -42,7 +42,11 @@ export const useGetTasksView = () => {
   const isFetchingTasksListRef = useRef(false);
   const isFetchingTasksViewRef = useRef(false);
   const currentTasksViewStatusRef = useRef("");
-
+  const [searchTerm, setSearchTerm] = useState("");
+  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
+  const handleSearchChange = (value: string) => {
+    setSearchTerm(value);
+  };
   const {
     currentPage: tasksListCurrentPage,
     setCurrentPage: setTasksListCurrentPage,
@@ -102,6 +106,7 @@ export const useGetTasksView = () => {
           status: taskStatus,
           limit,
           offset,
+          searchTerm: debouncedSearchTerm,
         };
 
         const { response, result, pagination } =
@@ -113,7 +118,7 @@ export const useGetTasksView = () => {
         }
 
         if (!response.ok) {
-          throw new Error("Failed to load tasks view");
+          throw new Error("Failed to search tasks");
         }
 
         if (
@@ -139,7 +144,7 @@ export const useGetTasksView = () => {
         );
       } catch (err) {
         if (err instanceof Error) {
-          setTasksViewError(new Error("Failed to load tasks"));
+          setTasksViewError(err);
         }
       } finally {
         isFetchingTasksViewRef.current = false;
@@ -157,8 +162,17 @@ export const useGetTasksView = () => {
         }
       }
     },
-    [limit, projectId, router, setTasksViewCurrentPage],
+    [limit, projectId, router, setTasksViewCurrentPage, debouncedSearchTerm],
   );
+  useEffect(() => {
+    const timer = window.setTimeout(() => {
+      setDebouncedSearchTerm(searchTerm.trim());
+    }, 300);
+
+    return () => {
+      window.clearTimeout(timer);
+    };
+  }, [searchTerm]);
 
   const getTasksList = useCallback(
     async (page = 1, loadingType: TasksLoadingType = "initial") => {
@@ -192,6 +206,7 @@ export const useGetTasksView = () => {
           projectId,
           limit,
           offset,
+          searchTerm: debouncedSearchTerm,
         };
 
         const { response, result, pagination } =
@@ -203,7 +218,7 @@ export const useGetTasksView = () => {
         }
 
         if (!response.ok) {
-          throw new Error("Failed to load tasks list");
+          throw new Error("Failed to search tasks");
         }
 
         if (latestTasksListRequestRef.current !== requestId) {
@@ -226,7 +241,7 @@ export const useGetTasksView = () => {
         );
       } catch (err) {
         if (err instanceof Error) {
-          setTasksListError(new Error("Failed to load task lists"));
+          setTasksListError(err);
         }
       } finally {
         isFetchingTasksListRef.current = false;
@@ -244,9 +259,39 @@ export const useGetTasksView = () => {
         }
       }
     },
-    [limit, projectId, router, setTasksListCurrentPage],
+    [limit, projectId, router, setTasksListCurrentPage, debouncedSearchTerm],
   );
 
+  useEffect(() => {
+    if (isMobile === null) {
+      return;
+    }
+
+    setTasksListCurrentPage(1);
+    setTasksViewCurrentPage(1);
+
+    let cancelled = false;
+
+    void Promise.resolve().then(() => {
+      if (!cancelled) {
+        getTasksList(1, "initial");
+        if (currentTasksViewStatusRef.current) {
+          getTasksView(currentTasksViewStatusRef.current, 1, "initial");
+        }
+      }
+    });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [
+    debouncedSearchTerm,
+    getTasksList,
+    isMobile,
+    setTasksListCurrentPage,
+    setTasksViewCurrentPage,
+    getTasksView
+  ]);
   useEffect(() => {
     const mediaQuery = window.matchMedia("(max-width: 1023px)");
 
@@ -264,7 +309,7 @@ export const useGetTasksView = () => {
   }, []);
 
   useEffect(() => {
-    if (isMobile === null) {
+    if (isMobile === null || debouncedSearchTerm) {
       return;
     }
 
@@ -279,7 +324,7 @@ export const useGetTasksView = () => {
     return () => {
       isActive = false;
     };
-  }, [getTasksList, isMobile]);
+  }, [getTasksList, isMobile, debouncedSearchTerm]);
 
   useEffect(() => {
     if (
@@ -371,5 +416,7 @@ export const useGetTasksView = () => {
     tasksListTotalCount,
     tasksListHasNextPage,
     handleTasksListPageChange,
+    searchTerm,
+    handleSearchChange,
   };
 };

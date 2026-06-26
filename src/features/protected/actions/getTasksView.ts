@@ -2,7 +2,10 @@
 
 import { getAuthTokens } from "../../auth/utils/sessionCookies";
 import type { TasksPaginationParams } from "../types/protected.types";
-import { emptyPagination, parseContentRange } from "../utils/parseContentRange";
+import {
+  emptyPagination,
+  parseContentRange,
+} from "../utils/parseContentRange";
 
 const parseResponse = async (response: Response) => {
   try {
@@ -18,6 +21,7 @@ export const getTasksViewApi = async ({
   status,
   limit,
   offset,
+  searchTerm,
 }: TasksPaginationParams) => {
   const { accessToken } = await getAuthTokens();
 
@@ -29,8 +33,21 @@ export const getTasksViewApi = async ({
     };
   }
 
+  const queryParams = new URLSearchParams({
+    project_id: `eq.${projectId}`,
+    status: `eq.${status}`,
+    limit: String(limit),
+    offset: String(offset),
+  });
+
+  const trimmedSearchTerm = searchTerm?.trim();
+
+  if (trimmedSearchTerm) {
+    queryParams.set("title", `ilike.%${trimmedSearchTerm}%`);
+  }
+
   const response = await fetch(
-    `${process.env.SUPABASE_URL}/rest/v1/project_tasks?project_id=eq.${projectId}&status=eq.${status}&limit=${limit}&offset=${offset}`,
+    `${process.env.SUPABASE_URL}/rest/v1/project_tasks?${queryParams.toString()}`,
     {
       method: "GET",
       headers: {
@@ -43,7 +60,9 @@ export const getTasksViewApi = async ({
   );
 
   const result = await parseResponse(response);
-  const pagination = parseContentRange(response.headers.get("Content-Range"));
+  const pagination = parseContentRange(
+    response.headers.get("Content-Range"),
+  );
 
   return {
     response: { ok: response.ok, status: response.status },
@@ -58,6 +77,7 @@ export const getTasksListApi = async ({
   projectId,
   limit,
   offset,
+  searchTerm,
 }: TasksPaginationParams) => {
   const { accessToken } = await getAuthTokens();
 
@@ -69,8 +89,20 @@ export const getTasksListApi = async ({
     };
   }
 
+  const queryParams = new URLSearchParams({
+    project_id: `eq.${projectId}`,
+    limit: String(limit),
+    offset: String(offset),
+  });
+
+  const trimmedSearchTerm = searchTerm?.trim();
+
+  if (trimmedSearchTerm) {
+    queryParams.set("title", `ilike.%${trimmedSearchTerm}%`);
+  }
+
   const response = await fetch(
-    `${process.env.SUPABASE_URL}/rest/v1/project_tasks?project_id=eq.${projectId}&limit=${limit}&offset=${offset}`,
+    `${process.env.SUPABASE_URL}/rest/v1/project_tasks?${queryParams.toString()}`,
     {
       method: "GET",
       headers: {
@@ -83,7 +115,9 @@ export const getTasksListApi = async ({
   );
 
   const result = await parseResponse(response);
-  const pagination = parseContentRange(response.headers.get("Content-Range"));
+  const pagination = parseContentRange(
+    response.headers.get("Content-Range"),
+  );
 
   return {
     response: { ok: response.ok, status: response.status },

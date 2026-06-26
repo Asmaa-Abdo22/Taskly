@@ -10,7 +10,23 @@ export type TasksLoadingType = "initial" | "pagination" | "infinite";
 
 export const TASKS_PAGE_LIMIT = 4;
 
-export const useGetTasksView = () => {
+type UseGetTasksViewOptions = {
+  enableTasksList?: boolean;
+  enableTasksViewSearch?: boolean;
+};
+
+let tasksSearchTermValue = "";
+const tasksSearchTermListeners = new Set<(value: string) => void>();
+
+const setSharedTasksSearchTerm = (value: string) => {
+  tasksSearchTermValue = value;
+  tasksSearchTermListeners.forEach((listener) => listener(value));
+};
+
+export const useGetTasksView = ({
+  enableTasksList = true,
+  enableTasksViewSearch = false,
+}: UseGetTasksViewOptions = {}) => {
   const [tasksViewLoading, setTasksViewLoading] = useState(true);
   const [allTasksView, setAllTasksView] = useState<Task[] | null>([]);
   const [tasksViewError, setTasksViewError] = useState<Error | string>("");
@@ -42,7 +58,15 @@ export const useGetTasksView = () => {
   const isFetchingTasksListRef = useRef(false);
   const isFetchingTasksViewRef = useRef(false);
   const currentTasksViewStatusRef = useRef("");
-
+  const hasHandledDebouncedSearchRef = useRef(false);
+  const hasLoadedInitialTasksListRef = useRef(false);
+  const [searchTerm, setSearchTerm] = useState(tasksSearchTermValue);
+  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState(
+    tasksSearchTermValue.trim(),
+  );
+  const handleSearchChange = useCallback((value: string) => {
+    setSharedTasksSearchTerm(value);
+  }, []);
   const {
     currentPage: tasksListCurrentPage,
     setCurrentPage: setTasksListCurrentPage,
@@ -70,7 +94,7 @@ export const useGetTasksView = () => {
       page = 1,
       loadingType: TasksLoadingType = "initial",
     ) => {
-      if (isFetchingTasksViewRef.current) {
+      if (isFetchingTasksViewRef.current && loadingType !== "initial") {
         return;
       }
 
@@ -102,6 +126,7 @@ export const useGetTasksView = () => {
           status: taskStatus,
           limit,
           offset,
+          searchTerm: debouncedSearchTerm,
         };
 
         const { response, result, pagination } =
@@ -113,7 +138,7 @@ export const useGetTasksView = () => {
         }
 
         if (!response.ok) {
-          throw new Error("Failed to load tasks view");
+          throw new Error("Failed to search tasks");
         }
 
         if (
@@ -139,9 +164,13 @@ export const useGetTasksView = () => {
         );
       } catch (err) {
         if (err instanceof Error) {
-          setTasksViewError(new Error("Failed to load tasks"));
+          setTasksViewError(err);
         }
       } finally {
+        if (latestTasksViewRequestRef.current !== requestId) {
+          return;
+        }
+
         isFetchingTasksViewRef.current = false;
 
         if (loadingType === "initial") {
@@ -157,12 +186,34 @@ export const useGetTasksView = () => {
         }
       }
     },
-    [limit, projectId, router, setTasksViewCurrentPage],
+    [limit, projectId, router, setTasksViewCurrentPage, debouncedSearchTerm],
   );
+
+  useEffect(() => {
+    const listener = (value: string) => {
+      setSearchTerm(value);
+    };
+
+    tasksSearchTermListeners.add(listener);
+
+    return () => {
+      tasksSearchTermListeners.delete(listener);
+    };
+  }, []);
+
+  useEffect(() => {
+    const timer = window.setTimeout(() => {
+      setDebouncedSearchTerm(searchTerm.trim());
+    }, 300);
+
+    return () => {
+      window.clearTimeout(timer);
+    };
+  }, [searchTerm]);
 
   const getTasksList = useCallback(
     async (page = 1, loadingType: TasksLoadingType = "initial") => {
-      if (isFetchingTasksListRef.current) {
+      if (isFetchingTasksListRef.current && loadingType !== "initial") {
         return;
       }
 
@@ -192,6 +243,7 @@ export const useGetTasksView = () => {
           projectId,
           limit,
           offset,
+          searchTerm: debouncedSearchTerm,
         };
 
         const { response, result, pagination } =
@@ -203,7 +255,7 @@ export const useGetTasksView = () => {
         }
 
         if (!response.ok) {
-          throw new Error("Failed to load tasks list");
+          throw new Error("Failed to search tasks");
         }
 
         if (latestTasksListRequestRef.current !== requestId) {
@@ -226,9 +278,13 @@ export const useGetTasksView = () => {
         );
       } catch (err) {
         if (err instanceof Error) {
-          setTasksListError(new Error("Failed to load task lists"));
+          setTasksListError(err);
         }
       } finally {
+        if (latestTasksListRequestRef.current !== requestId) {
+          return;
+        }
+
         isFetchingTasksListRef.current = false;
 
         if (loadingType === "initial") {
@@ -244,9 +300,51 @@ export const useGetTasksView = () => {
         }
       }
     },
-    [limit, projectId, router, setTasksListCurrentPage],
+    [limit, projectId, router, setTasksListCurrentPage, debouncedSearchTerm],
   );
 
+  useEffect(() => {
+    if (isMobile === null) {
+      return;
+    }
+
+    if (!hasHandledDebouncedSearchRef.current) {
+      hasHandledDebouncedSearchRef.current = true;
+      return;
+    }
+
+    setTasksListCurrentPage(1);
+    setTasksViewCurrentPage(1);
+
+    let cancelled = false;
+
+    void Promise.resolve().then(() => {
+      if (!cancelled) {
+        if (enableTasksList) {
+          setAllTasksList([]);
+          getTasksList(1, "initial");
+        }
+
+        if (enableTasksViewSearch && currentTasksViewStatusRef.current) {
+          setAllTasksView([]);
+          getTasksView(currentTasksViewStatusRef.current, 1, "initial");
+        }
+      }
+    });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [
+    debouncedSearchTerm,
+    enableTasksList,
+    enableTasksViewSearch,
+    getTasksList,
+    isMobile,
+    setTasksListCurrentPage,
+    setTasksViewCurrentPage,
+    getTasksView,
+  ]);
   useEffect(() => {
     const mediaQuery = window.matchMedia("(max-width: 1023px)");
 
@@ -264,9 +362,15 @@ export const useGetTasksView = () => {
   }, []);
 
   useEffect(() => {
-    if (isMobile === null) {
+    if (
+      !enableTasksList ||
+      isMobile === null ||
+      hasLoadedInitialTasksListRef.current
+    ) {
       return;
     }
+
+    hasLoadedInitialTasksListRef.current = true;
 
     let isActive = true;
 
@@ -279,7 +383,7 @@ export const useGetTasksView = () => {
     return () => {
       isActive = false;
     };
-  }, [getTasksList, isMobile]);
+  }, [enableTasksList, getTasksList, isMobile]);
 
   useEffect(() => {
     if (
@@ -371,5 +475,7 @@ export const useGetTasksView = () => {
     tasksListTotalCount,
     tasksListHasNextPage,
     handleTasksListPageChange,
+    searchTerm,
+    handleSearchChange,
   };
 };

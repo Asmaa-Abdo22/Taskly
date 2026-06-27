@@ -1,5 +1,7 @@
 "use client";
 
+import { DndContext } from "@dnd-kit/core";
+import { useTaskBoardDragAndDrop } from "../../hooks/useTaskBoardDragAndDrop";
 import StatusColumn from "./StatusColumn";
 
 const STATUSES = [
@@ -53,21 +55,26 @@ const STATUSES = [
   },
 ];
 
-export default function BoardView({
-  projectId,
-}: {
-  projectId: string;
-}) {
+export default function BoardView({ projectId }: { projectId: string }) {
+  const { sensors, collisionDetection, handleDragEnd, registerColumn } =
+    useTaskBoardDragAndDrop();
+
   return (
-    <div className="hidden md:grid grid-flow-col auto-cols-[280px] gap-3 overflow-x-auto py-3">
-      {STATUSES.map((column) => (
-        <StatusColumn
-          key={column.status}
-          projectId={projectId}
-          {...column}
-        />
-      ))}
-     
-    </div>
+    <DndContext
+      sensors={sensors}
+      collisionDetection={collisionDetection}
+      onDragEnd={handleDragEnd}
+    >
+      <div className="hidden md:grid grid-flow-col auto-cols-[280px] gap-3 overflow-x-auto py-3">
+        {STATUSES.map((column) => (
+          <StatusColumn
+            key={column.status}
+            projectId={projectId}
+            registerColumn={registerColumn}
+            {...column}
+          />
+        ))}
+      </div>
+    </DndContext>
   );
 }

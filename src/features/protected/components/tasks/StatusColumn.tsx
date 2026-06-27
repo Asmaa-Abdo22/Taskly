@@ -1,14 +1,19 @@
 "use client";
 
+import { useDroppable } from "@dnd-kit/core";
+import {
+  SortableContext,
+  verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
 import Link from "next/link";
 import { useEffect } from "react";
 import { useGetTasksView } from "../../hooks/useGetTasksView";
+import type { RegisteredTaskBoardColumn } from "../../hooks/useTaskBoardDragAndDrop";
 import type { Task } from "../../types/protected.types";
-import { getAvatarInitials } from "../../utils/getAvatarInitials";
 import TodoCardSkeleton from "./statusColSkeleton";
-import { formatDate } from "../../utils/formatDate";
 import { useAppDispatch } from "@/src/store/hooks";
 import { openTaskDetails } from "../../slices/taskDetailsSlice";
+import DraggableTaskCard from "./DraggableTaskCard";
 
 type Props = {
   projectId: string;
@@ -16,6 +21,10 @@ type Props = {
   title: string;
   circleColor: string;
   countBg: string;
+  registerColumn: (
+    status: string,
+    column: RegisteredTaskBoardColumn,
+  ) => () => void;
 };
 
 export default function StatusColumn({
@@ -24,22 +33,49 @@ export default function StatusColumn({
   title,
   circleColor,
   countBg,
+  registerColumn,
 }: Props) {
   const {
     getTasksView,
     allTasksView,
+    setAllTasksView,
     tasksViewLoading,
     tasksViewError,
     tasksViewInfiniteScrollLoading,
     tasksViewObserverRef,
     tasksViewTotalCount,
+    setTasksViewTotalCount,
     tasksViewHasNextPage,
     getNextTasksViewPage,
   } = useGetTasksView();
+  const { setNodeRef } = useDroppable({
+    id: status,
+    data: {
+      type: "column",
+      status,
+    },
+  });
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     getTasksView(status);
   }, [getTasksView, status]);
+
+  useEffect(() => {
+    return registerColumn(status, {
+      tasks: allTasksView,
+      totalCount: tasksViewTotalCount,
+      setTasks: setAllTasksView,
+      setTotalCount: setTasksViewTotalCount,
+    });
+  }, [
+    allTasksView,
+    registerColumn,
+    setAllTasksView,
+    setTasksViewTotalCount,
+    status,
+    tasksViewTotalCount,
+  ]);
 
   useEffect(() => {
     if (
@@ -71,7 +107,7 @@ export default function StatusColumn({
   if (tasksViewError) {
     throw tasksViewError;
   }
-  const dispatch = useAppDispatch();
+
   const getCardStyles = () => {
     switch (status) {
       case "IN_PROGRESS":
@@ -101,9 +137,10 @@ export default function StatusColumn({
   };
 
   const styles = getCardStyles();
+  const taskIds = allTasksView?.map((task) => task.id) || [];
 
   return (
-    <div className="flex flex-col gap-3 min-w-70">
+    <div ref={setNodeRef} className="flex flex-col gap-3 min-w-70">
       {/* header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
@@ -169,48 +206,17 @@ export default function StatusColumn({
           No tasks found
         </div>
       ) : (
-        allTasksView.map((task: Task) => (
-          <div
-            onClick={() => dispatch(openTaskDetails(task.id))}
-            key={task.id}
-            className={`
-        rounded-xl
-        p-5
-        min-h-35
-        flex
-        flex-col
-        justify-between
-        ${styles.card}
-        cursor-pointer
-      `}
-          >
-            <h3 className="text-[14px] font-medium text-slate-900 leading-7">
-              {task.title}
-            </h3>
-
-            <div className="flex items-center justify-between">
-              <span className="text-[10px] font-bold uppercase text-slate-400">
-                {formatDate(task.due_date)}
-              </span>
-
-              <div
-                className={`
-            w-8
-            h-8
-            rounded-full
-            flex
-            items-center
-            justify-center
-            text-[12px]
-            font-bold
-            ${styles.avatar}
-          `}
-              >
-                {getAvatarInitials(task.assignee?.name ?? "")}
-              </div>
-            </div>
-          </div>
-        ))
+        <SortableContext items={taskIds} strategy={verticalListSortingStrategy}>
+          {allTasksView.map((task: Task) => (
+            <DraggableTaskCard
+              key={task.id}
+              task={task}
+              status={status}
+              styles={styles}
+              onOpen={() => dispatch(openTaskDetails(task.id))}
+            />
+          ))}
+        </SortableContext>
       )}
       {tasksViewInfiniteScrollLoading && (
         <div className="text-center py-5">

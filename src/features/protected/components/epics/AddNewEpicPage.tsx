@@ -6,7 +6,7 @@ import ErrorIcon from "@/src/icons/error.svg";
 import { useAddNewEpic } from "../../hooks/useAddNewEpic";
 import { useGetProjectMembers } from "../../hooks/useGetProjectMembers";
 import type { Member } from "../../types/protected.types";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 const AddNewEpicPage = () => {
   const params = useParams();

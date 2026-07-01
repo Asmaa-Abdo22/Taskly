@@ -65,7 +65,7 @@ export default function BoardView({ projectId }: { projectId: string }) {
       collisionDetection={collisionDetection}
       onDragEnd={handleDragEnd}
     >
-      <div className="hidden md:grid grid-flow-col auto-cols-[280px] gap-3 overflow-x-auto py-3">
+      <div className="hidden md:grid grid-flow-col auto-cols-[280px] gap-3 overflow-x-auto overflow-y-hidden pt-3 pb-6">
         {STATUSES.map((column) => (
           <StatusColumn
             key={column.status}

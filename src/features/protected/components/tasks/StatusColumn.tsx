@@ -43,11 +43,14 @@ export default function StatusColumn({
     tasksViewError,
     tasksViewInfiniteScrollLoading,
     tasksViewObserverRef,
+    tasksViewScrollRef,
     tasksViewTotalCount,
     setTasksViewTotalCount,
     tasksViewHasNextPage,
     getNextTasksViewPage,
-  } = useGetTasksView();
+  } = useGetTasksView({
+    enableTasksList: false,
+  });
   const { setNodeRef } = useDroppable({
     id: status,
     data: {
@@ -82,16 +85,23 @@ export default function StatusColumn({
       tasksViewLoading ||
       tasksViewInfiniteScrollLoading ||
       !tasksViewHasNextPage ||
-      !tasksViewObserverRef.current
+      !tasksViewObserverRef.current ||
+      !tasksViewScrollRef.current
     ) {
       return;
     }
 
-    const observer = new IntersectionObserver((entries) => {
-      if (entries[0].isIntersecting) {
-        getNextTasksViewPage();
-      }
-    });
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          getNextTasksViewPage();
+        }
+      },
+      {
+        root: tasksViewScrollRef.current,
+        rootMargin: "120px 0px",
+      },
+    );
 
     observer.observe(tasksViewObserverRef.current);
 
@@ -102,6 +112,7 @@ export default function StatusColumn({
     tasksViewInfiniteScrollLoading,
     tasksViewLoading,
     tasksViewObserverRef,
+    tasksViewScrollRef,
   ]);
 
   if (tasksViewError) {
@@ -140,7 +151,10 @@ export default function StatusColumn({
   const taskIds = allTasksView?.map((task) => task.id) || [];
 
   return (
-    <div ref={setNodeRef} className="flex flex-col gap-3 min-w-70">
+    <div
+      ref={setNodeRef}
+      className="flex h-[calc(100vh-270px)] min-h-105 flex-col gap-3 min-w-70"
+    >
       {/* header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
@@ -185,45 +199,53 @@ export default function StatusColumn({
         + Add New Task
       </Link>
 
-      {/* tasks */}
-      {tasksViewLoading ? (
-        <div className="text-center py-5">
-          <TodoCardSkeleton />
-        </div>
-      ) : !allTasksView?.length ? (
-        <div
-          className="
-      rounded-xl
-      border
-      border-dashed
-      border-slate-300
-      p-5
-      text-center
-      text-sm
-      text-slate-500
-    "
-        >
-          No tasks found
-        </div>
-      ) : (
-        <SortableContext items={taskIds} strategy={verticalListSortingStrategy}>
-          {allTasksView.map((task: Task) => (
-            <DraggableTaskCard
-              key={task.id}
-              task={task}
-              status={status}
-              styles={styles}
-              onOpen={() => dispatch(openTaskDetails(task.id))}
-            />
-          ))}
-        </SortableContext>
-      )}
-      {tasksViewInfiniteScrollLoading && (
-        <div className="text-center py-5">
-          <TodoCardSkeleton />
-        </div>
-      )}
-      <div ref={tasksViewObserverRef} />
+      <div
+        ref={tasksViewScrollRef}
+        className="flex min-h-0 flex-1 flex-col gap-3 overflow-y-auto overscroll-contain pr-1"
+      >
+        {/* tasks */}
+        {tasksViewLoading ? (
+          <div className="text-center py-5">
+            <TodoCardSkeleton />
+          </div>
+        ) : !allTasksView?.length ? (
+          <div
+            className="
+        rounded-xl
+        border
+        border-dashed
+        border-slate-300
+        p-5
+        text-center
+        text-sm
+        text-slate-500
+      "
+          >
+            No tasks found
+          </div>
+        ) : (
+          <SortableContext
+            items={taskIds}
+            strategy={verticalListSortingStrategy}
+          >
+            {allTasksView.map((task: Task) => (
+              <DraggableTaskCard
+                key={task.id}
+                task={task}
+                status={status}
+                styles={styles}
+                onOpen={() => dispatch(openTaskDetails(task.id))}
+              />
+            ))}
+          </SortableContext>
+        )}
+        {tasksViewInfiniteScrollLoading && (
+          <div className="text-center py-5">
+            <TodoCardSkeleton />
+          </div>
+        )}
+        <div ref={tasksViewObserverRef} className="h-px" />
+      </div>
     </div>
   );
 }

@@ -45,7 +45,8 @@ export const useGetEpicDetails = (epicId: string) => {
   useEffect(() => {
     getEpicDetails();
   }, [epicId]);
-  const { getAllTasks,allTasks,tasksError,tasksLoading } = useGetAllTasks(epicId);
+  const { getAllTasks, allTasks, tasksError, tasksLoading } =
+    useGetAllTasks(epicId);
   useEffect(() => {
     getAllTasks();
   }, [epicId]);
@@ -121,7 +122,7 @@ export const useGetEpicDetails = (epicId: string) => {
         return { ...currentEpic, ...data };
       });
       toast.success("Epic updated successfully");
-      getAllTasks()
+      getAllTasks();
       return true;
     } catch {
       getOldValues();
@@ -225,6 +226,8 @@ export const useGetEpicDetails = (epicId: string) => {
     saveAssignee,
     saveDeadline,
     projectId,
-    allTasks,tasksError,tasksLoading
+    allTasks,
+    tasksError,
+    tasksLoading,
   };
 };

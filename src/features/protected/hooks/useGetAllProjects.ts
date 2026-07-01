@@ -153,7 +153,6 @@ export const useGetAllProjects = () => {
 
     setProjects([]);
     setCurrentPage(1);
-
     fetchProjects(1, "initial");
   }, [fetchProjects, isMobile, setCurrentPage]);
 

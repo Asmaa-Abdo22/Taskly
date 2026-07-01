@@ -2,6 +2,7 @@
 
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
+import DragandDrop from "@/src/icons/DragDrop.svg";
 import type { Task } from "../../types/protected.types";
 import { formatDate } from "../../utils/formatDate";
 import { getAvatarInitials } from "../../utils/getAvatarInitials";
@@ -28,6 +29,7 @@ export default function DraggableTaskCard({
     attributes,
     listeners,
     setNodeRef,
+    setActivatorNodeRef,
     transform,
     transition,
     isDragging,
@@ -48,7 +50,6 @@ export default function DraggableTaskCard({
         transition,
         opacity: isDragging ? 0.8 : undefined,
         zIndex: isDragging ? 1 : undefined,
-        touchAction: "none",
       }}
       onClick={onOpen}
       className={`
@@ -61,12 +62,29 @@ export default function DraggableTaskCard({
         ${styles.card}
         cursor-pointer
       `}
-      {...attributes}
-      {...listeners}
     >
-      <h3 className="text-[14px] font-medium text-slate-900 leading-7">
-        {task.title}
-      </h3>
+      <div className="flex items-start justify-between gap-3">
+        <h3 className="text-[14px] font-medium text-slate-900 leading-7">
+          {task.title}
+        </h3>
+
+        <button
+          ref={setActivatorNodeRef}
+          type="button"
+          aria-label="Drag task"
+          onClick={(event) => event.stopPropagation()}
+          className="shrink-0 cursor-grab rounded-md p-1 text-slate-400 active:cursor-grabbing"
+          style={{ touchAction: "none" }}
+          {...attributes}
+          {...listeners}
+        >
+          <DragandDrop
+            width={18}
+            height={18}
+            
+          />
+        </button>
+      </div>
 
       <div className="flex items-center justify-between">
         <span className="text-[10px] font-bold uppercase text-slate-400">

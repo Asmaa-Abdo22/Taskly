@@ -6,10 +6,12 @@ import TipIcon from "@/src/icons/tip.svg";
 import InviteIcon from "@/src/icons/invite.svg";
 import InitialzeProject from "@/src/icons/initialzeProject.svg";
 import { useEditProject } from "../hooks/useEditProject";
+import { useProjectName } from "../hooks/useProjectName";
 import { useParams } from "next/navigation";
 const EditProject = () => {
   const params = useParams();
   const projectId = params.projectId as string;
+  const projectName = useProjectName(projectId);
   const {
     loading,
     register,
@@ -35,7 +37,7 @@ const EditProject = () => {
             href={`/project/${projectId}/epics`}
             className="text-slate-600 uppercase text-label-sm tracking-[1.2px]"
           >
-            project title
+            {projectName}
           </Link>
           <span className="text-slate-600 text-sm"> &gt; </span>
           <span className=" text-label-sm  uppercase text-primaryy tracking-[1.2px]">

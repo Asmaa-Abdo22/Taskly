@@ -3,6 +3,7 @@ import LoadingSpinner from "@/src/components/LoadingSpinner";
 import Link from "next/link";
 import ErrorIcon from "@/src/icons/error.svg";
 import { useAddNewTask } from "../../hooks/useAddNewTask";
+import { useProjectName } from "../../hooks/useProjectName";
 
 const AddNewTaskPage = () => {
   const {
@@ -18,6 +19,7 @@ const AddNewTaskPage = () => {
     projectMembers,
     taskStatuses,
   } = useAddNewTask();
+  const projectName = useProjectName(projectId);
 
   const descriptionLength = watch("description")?.length || 0;
   const epicId = watch("epic_id") || "";
@@ -36,7 +38,7 @@ const AddNewTaskPage = () => {
             href={`/project/${projectId}/edit`}
             className="text-slate-600 uppercase text-label-sm tracking-[1.2px]"
           >
-            project alpha
+            {projectName}
           </Link>
           <span className="text-slate-600 text-sm"> &gt; </span>
           <Link

@@ -9,11 +9,13 @@ import { useRouter, useSearchParams } from "next/navigation";
 import ListView from "./ListView";
 import { useAppSelector } from "@/src/store/hooks";
 import TaskDetailsPopup from "./TaskDetailsPopup";
+import { useProjectName } from "../../hooks/useProjectName";
 export default function AllTasksPage() {
   const viewType = useSearchParams().get("view") as string;
   const { projectId, searchTerm, handleSearchChange } = useGetTasksView({
     enableTasksList: false,
   });
+  const projectName = useProjectName(projectId);
   const router = useRouter();
   const changeTypeInSelcet = (e: React.ChangeEvent<HTMLSelectElement>) => {
     router.push(`/project/${projectId}/tasks?view=${e.target.value}`);
@@ -37,7 +39,7 @@ export default function AllTasksPage() {
             href={`/project/${projectId}/edit`}
             className="text-slate-600 uppercase text-label-sm tracking-[1.2px]"
           >
-            project alpha
+            {projectName}
           </Link>
           <span className="text-slate-600 text-sm"> &gt; </span>
           <span className="text-label-sm  uppercase text-primaryy tracking-[1.2px]">
@@ -50,7 +52,7 @@ export default function AllTasksPage() {
               Active Workboard
             </h1>
             <p className="text-body-md md:text-[16px] text-slate-700 leading-relaxed">
-              Curating Project Alpha's production pipeline and milestones.
+              Curating {projectName}'s production pipeline and milestones.
             </p>
           </div>
 

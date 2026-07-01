@@ -7,12 +7,14 @@ import { useAddNewEpic } from "../../hooks/useAddNewEpic";
 import { useGetProjectMembers } from "../../hooks/useGetProjectMembers";
 import type { Member } from "../../types/protected.types";
 import { useCallback, useEffect, useState } from "react";
+import { useProjectName } from "../../hooks/useProjectName";
 
 const AddNewEpicPage = () => {
   const params = useParams();
   const projectId = params.projectId as string;
   const [members, setMembers] = useState<Member[]>([]);
   const { getProjectMembers } = useGetProjectMembers();
+  const projectName = useProjectName(projectId);
   const {
     register,
     router,
@@ -52,7 +54,7 @@ const AddNewEpicPage = () => {
             href={`/project/${projectId}/edit`}
             className="text-slate-600 uppercase text-label-sm tracking-[1.2px]"
           >
-            project alpha
+            {projectName}
           </Link>
           <span className="text-slate-600 text-sm"> &gt; </span>
           <Link

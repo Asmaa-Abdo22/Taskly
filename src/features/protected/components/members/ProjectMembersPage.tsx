@@ -8,11 +8,13 @@ import { useCallback, useEffect, useState } from "react";
 import { Member } from "../../types/protected.types";
 import MembersSkeleton from "./MemberSkeleton";
 import { getAvatarInitials } from "../../utils/getAvatarInitials";
+import { useProjectName } from "../../hooks/useProjectName";
 
 const ProjectMembersPage = () => {
   const params = useParams();
   const projectId = params.projectId as string;
   const { getProjectMembers, loading } = useGetProjectMembers();
+  const projectName = useProjectName(projectId);
   const [projectMembers, setProjectMembers] = useState<Member[]>([]);
   const [error, setError] = useState<Error | null>(null);
   const loadMembers = useCallback(async () => {
@@ -51,7 +53,7 @@ const ProjectMembersPage = () => {
             href={`/project/${projectId}/edit`}
             className="text-slate-600 uppercase text-label-sm tracking-[1.2px]"
           >
-            project name
+            {projectName}
           </Link>
           <span className="text-slate-600 text-sm"> &gt; </span>
           <span className=" text-label-sm  uppercase text-primaryy tracking-[1.2px]">

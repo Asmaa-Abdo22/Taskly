@@ -1,36 +1,43 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 📋 Taskly – Project Management System
 
-## Getting Started
+A modern, full-featured **Project Management System** built with **Next.js & React**.  
+Taskly helps teams organize work, track progress, and collaborate efficiently  offering an intuitive interface for managing projects, epics, tasks, and team members.
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+**Built With**
+- Next.js 16 + React 19  
+- TypeScript  
+- Tailwind CSS 4 + @tailwindcss/postcss  
+- Supabase (Authentication & PostgreSQL Database)  
+- Redux Toolkit + React Redux  
+- React Hook Form + Zod (Form Validation)  
+- @dnd-kit (Drag & Drop Kanban Board)  
+- React Hot Toast (Notifications)  
+- SVGR (SVG as React Components)  
+- ESLint + Prettier  
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+**Key Features**
+- Secure Authentication (Sign Up, Login, Forgot & Reset Password)  
+- Session Management with Token Refresh  
+- Project Dashboard to Create, Edit & Browse Projects  
+- Epic Management with Search, Pagination & Detail Modals  
+- Kanban Board with Drag & Drop Task Status Updates  
+- List View for Tasks with Search & Filtering  
+- Task Details Popup for Quick View & Updates  
+- Project Members Page with Role Display  
+- Collapsible Sidebar & Mobile Bottom Navigation  
+- Loading Skeletons, Error Boundaries & Toast Feedback  
+- Fully Responsive UI  
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+---
 
-## Learn More
+**Screenshots**
+<!-- Replace with your screenshot URL after uploading to GitHub -->
+![Taskly Screenshot](https://github.com/user-attachments/assets/your-screenshot-id-here)
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+**Developed by:** [Asmaa Abdo](https://github.com/Asmaa-Abdo22) @2026

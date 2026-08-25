@@ -35,8 +35,7 @@ Taskly helps teams organize work, track progress, and collaborate efficiently  o
 ---
 
 **Screenshots**
-<!-- Replace with your screenshot URL after uploading to GitHub -->
-![Taskly Screenshot](https://github.com/user-attachments/assets/your-screenshot-id-here)
+![Taskly Screenshot](https://github.com/user-attachments/assets/4e2288ac-b5ef-4d7d-a5ae-23a6e23a1e8d)
 
 ---
 
